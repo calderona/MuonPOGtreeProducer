@@ -1,0 +1,21 @@
+<use name="CommonTools/Utils"/>
+<use name="FWCore/Framework"/>
+<use name="FWCore/PluginManager"/>
+<use name="FWCore/ParameterSet"/>
+<use name="DataFormats/Common"/>
+<use name="DataFormats/Candidate"/>
+<use name="DataFormats/PatCandidates"/>
+<use name="PhysicsTools/Utilities"/>
+<use name="CommonTools/UtilAlgos"/>
+<use name="PhysicsTools/PatAlgos"/>
+<use name="CommonTools/CandUtils"/>
+
+<library name="MuonPOGToolsPlugin" file="*.cc">
+   <use name="MuonPOG/Tools"/>
+   <use name="root"/>
+   <use name="rootminuit"/>
+   <use name="clhep"/>
+   <use name="rootrflx"/>
+   <use name="rootmath"/>
+   <Flags EDM_PLUGIN="1"/>
+</library>
