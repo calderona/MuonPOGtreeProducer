@@ -7,7 +7,7 @@ Muon POG tree producer
 cmsrel CMSSW_8_0_20 # Just an example release, works in CMSSW >= 74X at present 
 cd CMSSW_8_0_20/src/
 
-git clone https://github.com/calderona/MuonPOG/  (to be updated later) 
+git clone git@github.com:cms-MuonPOG/MuonPOGtreeProducer.git
 
 cmsenv
 
