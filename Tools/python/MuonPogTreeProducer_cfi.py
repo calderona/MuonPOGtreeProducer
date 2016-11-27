@@ -16,9 +16,7 @@ MuonPogTree = cms.EDAnalyzer("MuonPogTreeProducer",
                              CaloMetTag       = cms.untracked.InputTag("caloMet"),
 
                              ScalersTag = cms.untracked.InputTag("scalersRawToDigi"),
-                             # not filled for now!
-                             # l1MuonsTag = cms.untracked.InputTag("gmtStage2Digis:Muon:"),
-                             l1MuonsTag = cms.untracked.InputTag("none"),
+                             l1MuonsTag = cms.untracked.InputTag("gmtStage2Digis:Muon:"),
 
                              GenTag = cms.untracked.InputTag("prunedGenParticles"), # pruned
                              PileUpInfoTag = cms.untracked.InputTag("addPileupInfo"),

@@ -6,7 +6,7 @@ process = cms.Process("PRINT")
 options = VarParsing.VarParsing()
 
 options.register('globalTag',
-                 '76X_dataRun2_v5', #default value
+                 '80X_dataRun2_v8', #default value
 
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.string,
@@ -24,15 +24,12 @@ options.register('runOnMiniAOD',
                  VarParsing.VarParsing.varType.bool,
                  "Run on AOD or miniAOD")
 
-<<<<<<< HEAD
-=======
 options.register('muonMinPt',
                  -1., #default value
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.float,
                  "Minimal pT cut for muons")
 
->>>>>>> carlo/80X
 options.register('runOnMC',
                  False, #default value
                  VarParsing.VarParsing.multiplicity.singleton,
@@ -72,6 +69,7 @@ process.muonEventDumper = cms.EDAnalyzer("MuonEventDumper",
 
 
                              MuonTag          = cms.untracked.InputTag("muons"),
+                             MuonMinPt        = cms.untracked.double(options.muonMinPt),
                              PrimaryVertexTag = cms.untracked.InputTag("offlinePrimaryVertices"),
                              BeamSpotTag      = cms.untracked.InputTag("offlineBeamSpot"),
                              
