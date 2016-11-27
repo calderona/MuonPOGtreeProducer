@@ -7,8 +7,7 @@ import sys
 options = VarParsing.VarParsing()
 
 options.register('globalTag',
-                 '80X_mcRun2_asymptotic_2016_v3', #default value
-
+                 '80X_mcRun2_asymptotic_2016_TrancheIV_v4', #default value
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.string,
                  "Global Tag")
@@ -20,7 +19,6 @@ options.register('nEvents',
                  "Maximum number of processed events")
 
 options.register('eosInputFolder',
-
                  '/store/relval/CMSSW_8_0_20/RelValZMM_13/GEN-SIM-RECO/PU25ns_80X_mcRun2_asymptotic_2016_TrancheIV_v4_Tr4GT_v4-v1/00000', #default value
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.string,
