@@ -60,10 +60,10 @@ namespace muon_pog
 		      const std::string & trackType)
   {
 
-    if (trackType == "PF")         return muon.charge;
-    else if (trackType == "TUNEP") return muon.charge_tuneP;
-    else if (trackType == "GLB")   return muon.charge_global;
-    else if (trackType == "INNER") return muon.charge_tracker;
+    if (trackType == "PF")         return muon.fits.at(muons_pog::MuonFitType::DEFAULT).charge;
+    else if (trackType == "TUNEP") return muon.fits.at(muons_pog::MuonFitType::TUNEP).charge;
+    else if (trackType == "GLB")   return muon.fits.at(muons_pog::MuonFitType::GLB).charge;;
+    else if (trackType == "INNER") return muon.fits.at(muons_pog::MuonFitType::INNER).charge;;
     else
       {
 	std::cout << "[Plotter::chargeFromTrk]: Invalid track type: "
@@ -82,15 +82,16 @@ namespace muon_pog
 			const std::string & trackType)
   {
 
-    TLorentzVector result; 
+    TLorentzVector result;
+    muon_pog::MuonFit fit;
     if (trackType == "PF")
-      result.SetPtEtaPhiM(muon.pt,muon.eta,muon.phi,.10565);
+      fit = muon.fits.at(muons_pog::MuonFitType::DEFAULT)
     else if (trackType == "TUNEP")
-      result.SetPtEtaPhiM(muon.pt_tuneP,muon.eta_tuneP,muon.phi_tuneP,.10565);
+      fit = muon.fits.at(muons_pog::MuonFitType::TUNEP)
     else if (trackType == "GLB")
-      result.SetPtEtaPhiM(muon.pt_global,muon.eta_global,muon.phi_global,.10565);
+      fit = muon.fits.at(muons_pog::MuonFitType::GLB)
     else if (trackType == "INNER")
-      result.SetPtEtaPhiM(muon.pt_tracker,muon.eta_tracker,muon.phi_tracker,.10565);
+      fit = muon.fits.at(muons_pog::MuonFitType::INNER)
     else
       {
 	std::cout << "[Plotter::muonTk]: Invalid track type: "
@@ -98,6 +99,7 @@ namespace muon_pog
 	exit(900);
       }
 
+    result.SetPtEtaPhiM(fit.pt,fit.eta,fit.phi,.10565);
     return result;
     
   }

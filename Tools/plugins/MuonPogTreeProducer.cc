@@ -612,25 +612,32 @@ Int_t MuonPogTreeProducer::fillMuons(const edm::Handle<edm::View<reco::Muon> > &
       ntupleMu.phi    = mu.phi();
       ntupleMu.charge = mu.charge();
 
-      ntupleMu.pt_global     = isGlobal ? mu.globalTrack()->pt()  : -1000.;
-      ntupleMu.eta_global    = isGlobal ? mu.globalTrack()->eta() : -1000.;
-      ntupleMu.phi_global    = isGlobal ? mu.globalTrack()->phi() : -1000.;
-      ntupleMu.charge_global = isGlobal ? mu.globalTrack()->charge() : -1000.;
+      ntupleMu.fits.push_back(muon_pog::MuonFit(mu.pt(),mu.eta(),mu.phi(),
+						mu.charge(),mu.muonBestTrack()->ptError()));
 
-      ntupleMu.pt_tuneP     = hasTunePTrack ? mu.tunePMuonBestTrack()->pt()  : -1000.;
-      ntupleMu.eta_tuneP    = hasTunePTrack ? mu.tunePMuonBestTrack()->eta() : -1000.;
-      ntupleMu.phi_tuneP    = hasTunePTrack ? mu.tunePMuonBestTrack()->phi() : -1000.;
-      ntupleMu.charge_tuneP = hasTunePTrack ? mu.tunePMuonBestTrack()->charge() : -1000.;
+      ntupleMu.fits.push_back(muon_pog::MuonFit(hasInnerTrack ? mu.innerTrack()->pt()  : -1000.,
+						hasInnerTrack ? mu.innerTrack()->eta() : -1000.,
+						hasInnerTrack ? mu.innerTrack()->phi() : -1000.,
+						hasInnerTrack ? mu.innerTrack()->charge()  : -1000.,
+						hasInnerTrack ? mu.innerTrack()->ptError() : -1000.));
 
-      ntupleMu.pt_tracker     = hasInnerTrack ? mu.innerTrack()->pt()  : -1000.;
-      ntupleMu.eta_tracker    = hasInnerTrack ? mu.innerTrack()->eta() : -1000.;
-      ntupleMu.phi_tracker    = hasInnerTrack ? mu.innerTrack()->phi() : -1000.;
-      ntupleMu.charge_tracker = hasInnerTrack ? mu.innerTrack()->charge() : -1000.;
+      ntupleMu.fits.push_back(muon_pog::MuonFit(isStandAlone ? mu.outerTrack()->pt()  : -1000.,
+						isStandAlone ? mu.outerTrack()->eta() : -1000.,
+						isStandAlone ? mu.outerTrack()->phi() : -1000.,
+						isStandAlone ? mu.outerTrack()->charge()  : -1000.,
+						isStandAlone ? mu.outerTrack()->ptError() : -1000.));
 
-      ntupleMu.pt_standalone     = isStandAlone ? mu.outerTrack()->pt()  : -1000.;
-      ntupleMu.eta_standalone    = isStandAlone ? mu.outerTrack()->eta() : -1000.;
-      ntupleMu.phi_standalone    = isStandAlone ? mu.outerTrack()->phi() : -1000.;
-      ntupleMu.charge_standalone = isStandAlone ? mu.outerTrack()->charge() : -1000.;
+      ntupleMu.fits.push_back(muon_pog::MuonFit(isGlobal ? mu.globalTrack()->pt()  : -1000.,
+						isGlobal ? mu.globalTrack()->eta() : -1000.,
+						isGlobal ? mu.globalTrack()->phi() : -1000.,
+						isGlobal ? mu.globalTrack()->charge()  : -1000.,
+						isGlobal ? mu.globalTrack()->ptError() : -1000.));
+
+      ntupleMu.fits.push_back(muon_pog::MuonFit(hasTunePTrack ? mu.tunePMuonBestTrack()->pt()  : -1000.,
+						hasTunePTrack ? mu.tunePMuonBestTrack()->eta() : -1000.,
+						hasTunePTrack ? mu.tunePMuonBestTrack()->phi() : -1000.,
+						hasTunePTrack ? mu.tunePMuonBestTrack()->charge()  : -1000.,
+						hasTunePTrack ? mu.tunePMuonBestTrack()->ptError() : -1000.));
 
       // Detector Based Isolation
       reco::MuonIsolation detIso03 = mu.isolationR03();
@@ -792,11 +799,11 @@ Int_t MuonPogTreeProducer::fillMuons(const edm::Handle<edm::View<reco::Muon> > &
       if ( m_minMuPtCut < 0 ||
 	   (
 	    (isTracker || isGlobal || isStandAlone) &&
-	    (ntupleMu.pt            > m_minMuPtCut ||
-	     ntupleMu.pt_global     > m_minMuPtCut ||
-	     ntupleMu.pt_tuneP      > m_minMuPtCut ||
-	     ntupleMu.pt_tracker    > m_minMuPtCut ||
-	     ntupleMu.pt_standalone > m_minMuPtCut)
+	    (ntupleMu.fitPt(muon_pog::MuonFitType::DEFAULT) > m_minMuPtCut ||
+	     ntupleMu.fitPt(muon_pog::MuonFitType::GLB)     > m_minMuPtCut ||
+	     ntupleMu.fitPt(muon_pog::MuonFitType::TUNEP)   > m_minMuPtCut ||
+	     ntupleMu.fitPt(muon_pog::MuonFitType::INNER)   > m_minMuPtCut ||
+	     ntupleMu.fitPt(muon_pog::MuonFitType::STA)     > m_minMuPtCut)
 	    )
 	   )
 	event_.muons.push_back(ntupleMu);
