@@ -236,7 +236,7 @@ void MuonPogTreeProducer::analyze (const edm::Event & ev, const edm::EventSetup 
   eventId_.runNumber = ev.id().run();
   eventId_.luminosityBlockNumber = ev.id().luminosityBlock();
   eventId_.eventNumber = ev.id().event();
-
+    
   // Fill GEN pile up information
   if (!ev.isRealData()) 
     {
@@ -369,6 +369,7 @@ void MuonPogTreeProducer::analyze (const edm::Event & ev, const edm::EventSetup 
     {
       nGoodMuons = fillMuons(muons,vertexes,beamSpot);
     }
+  eventId_.nMuons = nGoodMuons;
 
     
   //Fill L1 informations
@@ -604,6 +605,9 @@ Int_t MuonPogTreeProducer::fillMuons(const edm::Handle<edm::View<reco::Muon> > &
 
       bool hasInnerTrack = !mu.innerTrack().isNull();
       bool hasTunePTrack = !mu.tunePMuonBestTrack().isNull();
+      bool hasPickyTrack = !mu.pickyTrack().isNull();
+      bool hasDytTrack = !mu.dytTrack().isNull();
+      bool hasTpfmsTrack = !mu.tpfmsTrack().isNull();
       
       muon_pog::Muon ntupleMu;
       
@@ -638,6 +642,24 @@ Int_t MuonPogTreeProducer::fillMuons(const edm::Handle<edm::View<reco::Muon> > &
 						hasTunePTrack ? mu.tunePMuonBestTrack()->phi() : -1000.,
 						hasTunePTrack ? mu.tunePMuonBestTrack()->charge()  : -1000.,
 						hasTunePTrack ? mu.tunePMuonBestTrack()->ptError() : -1000.));
+        
+      ntupleMu.fits.push_back(muon_pog::MuonFit(hasPickyTrack ? mu.pickyTrack()->pt()  : -1000.,
+                        hasPickyTrack ? mu.pickyTrack()->eta() : -1000.,
+                        hasPickyTrack ? mu.pickyTrack()->phi() : -1000.,
+                        hasPickyTrack ? mu.pickyTrack()->charge()  : -1000.,
+                        hasPickyTrack ? mu.pickyTrack()->ptError() : -1000.));
+        
+      ntupleMu.fits.push_back(muon_pog::MuonFit(hasDytTrack ? mu.dytTrack()->pt()  : -1000.,
+                        hasDytTrack ? mu.dytTrack()->eta() : -1000.,
+                        hasDytTrack ? mu.dytTrack()->phi() : -1000.,
+                        hasDytTrack ? mu.dytTrack()->charge()  : -1000.,
+                        hasDytTrack ? mu.dytTrack()->ptError() : -1000.));
+        
+      ntupleMu.fits.push_back(muon_pog::MuonFit(hasTpfmsTrack ? mu.tpfmsTrack()->pt()  : -1000.,
+                        hasTpfmsTrack ? mu.tpfmsTrack()->eta() : -1000.,
+                        hasTpfmsTrack ? mu.tpfmsTrack()->phi() : -1000.,
+                        hasTpfmsTrack ? mu.tpfmsTrack()->charge()  : -1000.,
+                        hasTpfmsTrack ? mu.tpfmsTrack()->ptError() : -1000.));
 
       // Detector Based Isolation
       reco::MuonIsolation detIso03 = mu.isolationR03();
@@ -803,10 +825,12 @@ Int_t MuonPogTreeProducer::fillMuons(const edm::Handle<edm::View<reco::Muon> > &
 	     ntupleMu.fitPt(muon_pog::MuonFitType::GLB)     > m_minMuPtCut ||
 	     ntupleMu.fitPt(muon_pog::MuonFitType::TUNEP)   > m_minMuPtCut ||
 	     ntupleMu.fitPt(muon_pog::MuonFitType::INNER)   > m_minMuPtCut ||
-	     ntupleMu.fitPt(muon_pog::MuonFitType::STA)     > m_minMuPtCut)
+	     ntupleMu.fitPt(muon_pog::MuonFitType::STA)     > m_minMuPtCut ||
+         ntupleMu.fitPt(muon_pog::MuonFitType::PICKY)   > m_minMuPtCut ||
+         ntupleMu.fitPt(muon_pog::MuonFitType::DYT)     > m_minMuPtCut ||
+         ntupleMu.fitPt(muon_pog::MuonFitType::TPFMS)   > m_minMuPtCut)
 	    )
-	   )
-	event_.muons.push_back(ntupleMu);
+          ) event_.muons.push_back(ntupleMu);
 
     }
 

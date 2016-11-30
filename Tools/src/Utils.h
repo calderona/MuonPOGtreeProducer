@@ -55,15 +55,19 @@ namespace muon_pog
 
 
   // Returns the charge muon_pog::Muon for a given fit 
-  // Valid track fits are: PF, TUNEP, GLB, INNER 
+  // Valid track fits are: PF, TUNEP, GLB, INNER, PICKY, DYT, TPFMS
   Int_t chargeFromTrk(const muon_pog::Muon & muon, 
 		      const std::string & trackType)
   {
 
     if (trackType == "PF")         return muon.fits.at(muons_pog::MuonFitType::DEFAULT).charge;
     else if (trackType == "TUNEP") return muon.fits.at(muons_pog::MuonFitType::TUNEP).charge;
-    else if (trackType == "GLB")   return muon.fits.at(muons_pog::MuonFitType::GLB).charge;;
-    else if (trackType == "INNER") return muon.fits.at(muons_pog::MuonFitType::INNER).charge;;
+    else if (trackType == "GLB")   return muon.fits.at(muons_pog::MuonFitType::GLB).charge;
+    else if (trackType == "INNER") return muon.fits.at(muons_pog::MuonFitType::INNER).charge;
+    else if (trackType == "PICKY") return muon.fits.at(muons_pog::MuonFitType::PICKY).charge;
+    else if (trackType == "DYT") return muon.fits.at(muons_pog::MuonFitType::DYT).charge;
+    else if (trackType == "TPFMS") return muon.fits.at(muons_pog::MuonFitType::TPFMS).charge;
+      
     else
       {
 	std::cout << "[Plotter::chargeFromTrk]: Invalid track type: "
@@ -77,7 +81,7 @@ namespace muon_pog
 
 
   // Return a TLorentz vector out of a given fit from muon_pog::Muon 
-  // Valid track fits are: PF, TUNEP, GLB, INNER 
+  // Valid track fits are: PF, TUNEP, GLB, INNER, PICKY, DYT, TPFMS
   TLorentzVector muonTk(const muon_pog::Muon & muon, 
 			const std::string & trackType)
   {
@@ -92,6 +96,12 @@ namespace muon_pog
       fit = muon.fits.at(muons_pog::MuonFitType::GLB)
     else if (trackType == "INNER")
       fit = muon.fits.at(muons_pog::MuonFitType::INNER)
+    else if (trackType == "PICKY")
+      fit = muon.fits.at(muons_pog::MuonFitType::PICKY)
+    else if (trackType == "DYT")
+      fit = muon.fits.at(muons_pog::MuonFitType::DYT)
+    else if (trackType == "TPFMS")
+      fit = muon.fits.at(muons_pog::MuonFitType::TPFMS)
     else
       {
 	std::cout << "[Plotter::muonTk]: Invalid track type: "

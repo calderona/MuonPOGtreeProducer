@@ -25,7 +25,7 @@ options.register('eosInputFolder',
                  "EOS folder with input files")
 
 options.register('ntupleName',
-                 './muonPOGNtuple_8_0_3_RelValZMM_13.root', #default value
+                 './muonPOGNtuple_8_0_8_ZToMuMu_powheg_M_1400_2300_13.root', #default value
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.string,
                  "Folder and name ame for output ntuple")
@@ -98,7 +98,7 @@ process.load("Configuration.StandardSequences.MagneticField_38T_cff")
 #process.load("Geometry.CommonDetUnit.globalTrackingGeometry_cfi")
 #process.load("RecoMuon.DetLayers.muonDetLayerGeometry_cfi")
 
-from MuonPOG.Tools.MuonPogNtuples_cff import appendMuonPogNtuple, customiseHlt, customiseMuonCuts
+from MuonPOGtreeProducer.Tools.MuonPogNtuples_cff import appendMuonPogNtuple, customiseHlt, customiseMuonCuts
     
 appendMuonPogNtuple(process,options.runOnMC,"HLT",options.ntupleName)
 

@@ -108,7 +108,7 @@ namespace muon_pog {
     ClassDef(HitInfo,1)
   };
 
-  enum MuonFitType { DEFAULT=0, INNER, STA, GLB, TUNEP};
+  enum MuonFitType { DEFAULT=0, INNER, STA, GLB, TUNEP, PICKY, DYT, TPFMS};
 
   class MuonFit {
   public:
@@ -323,6 +323,7 @@ namespace muon_pog {
     Int_t runNumber;              // run number
     Int_t luminosityBlockNumber;  // luminosity block number
     Int_t eventNumber;            // event number
+    Int_t nMuons;                 // event number of good muons
 
     EventId(){};
     virtual ~EventId(){};
