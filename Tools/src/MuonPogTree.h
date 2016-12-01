@@ -87,7 +87,7 @@ namespace muon_pog {
     ChambMatch(){};
     virtual ~ChambMatch(){};
     
-    ClassDef(ChambMatch,1)
+    ClassDef(ChambMatch,2)
   };
 
   class HitInfo {
@@ -328,7 +328,7 @@ namespace muon_pog {
     EventId(){};
     virtual ~EventId(){};
 
-    ClassDef(EventId,1)
+    ClassDef(EventId,2)
   };
 
   class Event {
