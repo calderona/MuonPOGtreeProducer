@@ -323,7 +323,8 @@ namespace muon_pog {
     Int_t runNumber;              // run number
     Int_t luminosityBlockNumber;  // luminosity block number
     Int_t eventNumber;            // event number
-    Int_t nMuons;                 // event number of good muons
+    Int_t nMuons;                 // number of good muons in the event
+    std::vector<Float_t> maxPTs;  // max PT for each good muon in the event
 
     EventId(){};
     virtual ~EventId(){};

@@ -25,7 +25,7 @@ options.register('eosInputFolder',
                  "EOS folder with input files")
 
 options.register('ntupleName',
-                 './muonPOGNtuple_8_0_8_ZToMuMu_powheg_M_1400_2300_13.root', #default value
+                 './muonPOGNtuple_8_0_3_RelValZMM_13.root', #default value
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.string,
                  "Folder and name ame for output ntuple")

@@ -364,6 +364,7 @@ void MuonPogTreeProducer::analyze (const edm::Event & ev, const edm::EventSetup 
   
 
   Int_t nGoodMuons = 0;
+  eventId_.maxPTs.clear();
   // Fill muon information
   if (muons.isValid() && vertexes.isValid() && beamSpot.isValid()) 
     {
@@ -830,7 +831,19 @@ Int_t MuonPogTreeProducer::fillMuons(const edm::Handle<edm::View<reco::Muon> > &
          ntupleMu.fitPt(muon_pog::MuonFitType::DYT)     > m_minMuPtCut ||
          ntupleMu.fitPt(muon_pog::MuonFitType::TPFMS)   > m_minMuPtCut)
 	    )
-          ) event_.muons.push_back(ntupleMu);
+          )
+      {
+        event_.muons.push_back(ntupleMu);
+        
+        std::vector<Float_t> PTs = {ntupleMu.fitPt(muon_pog::MuonFitType::DEFAULT),
+                         ntupleMu.fitPt(muon_pog::MuonFitType::GLB),
+                         ntupleMu.fitPt(muon_pog::MuonFitType::TUNEP),
+                         ntupleMu.fitPt(muon_pog::MuonFitType::INNER),
+                         ntupleMu.fitPt(muon_pog::MuonFitType::PICKY),
+                         ntupleMu.fitPt(muon_pog::MuonFitType::DYT),
+                         ntupleMu.fitPt(muon_pog::MuonFitType::TPFMS)};
+        eventId_.maxPTs.push_back(*std::max_element(PTs.begin(), PTs.end()));
+      }
 
     }
 
