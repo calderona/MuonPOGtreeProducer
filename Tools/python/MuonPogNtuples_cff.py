@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 
 def appendMuonPogNtuple(process, runOnMC, processTag="HLT", ntupleFileName="MuonPogTree.root") :
 
-    process.load("MuonPOG.Tools.MuonPogTreeProducer_cfi")
+    process.load("MuonPOGtreeProducer.Tools.MuonPogTreeProducer_cfi")
     process.load("CommonTools.ParticleFlow.goodOfflinePrimaryVertices_cfi")
 
     if processTag != "HLT" :
@@ -12,7 +12,7 @@ def appendMuonPogNtuple(process, runOnMC, processTag="HLT", ntupleFileName="Muon
         process.MuonPogTree.TrigSummaryTag = "hltTriggerSummaryAOD::"+processTag
 
     if runOnMC :
-        process.load("MuonPOG.Tools.PrunedGenParticles_cfi")
+        process.load("MuonPOGtreeProducer.Tools.PrunedGenParticles_cfi")
         process.muonPogNtuple = cms.Sequence(process.prunedGenParticles + process.MuonPogTree)
     else :
         process.muonPogNtuple = cms.Sequence(process.MuonPogTree)
