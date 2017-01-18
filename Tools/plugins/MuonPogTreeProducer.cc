@@ -5,7 +5,7 @@
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/Utilities/interface/InputTag.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
-#include "FWCore/Framework/interface/Event.h" 
+#include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/EventSetup.h"
 
 #include "DataFormats/Common/interface/Handle.h"
@@ -42,7 +42,7 @@
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/HepMCCandidate/interface/GenStatusFlags.h"
 #include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
-#include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h" 
+#include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 
 #include "DataFormats/Scalers/interface/LumiScalers.h"
 #include "DataFormats/Luminosity/interface/LumiDetails.h"
@@ -57,41 +57,44 @@
 #include <algorithm>
 #include <iostream>
 
-class MuonPogTreeProducer : public edm::EDAnalyzer 
+class MuonPogTreeProducer : public edm::EDAnalyzer
 {
 public:
 
   MuonPogTreeProducer(const edm::ParameterSet &);
-  
+
   virtual void analyze(const edm::Event&, const edm::EventSetup&);
   virtual void beginRun(const edm::Run&, const edm::EventSetup&);
   virtual void beginJob();
   virtual void endJob();
-  
+
 private:
-  
+
   void fillGenInfo(const edm::Handle<std::vector<PileupSummaryInfo> > &,
 		   const  edm::Handle<GenEventInfoProduct> &);
 
   void fillGenParticles(const edm::Handle<reco::GenParticleCollection> &);
 
-  void fillHlt(const edm::Handle<edm::TriggerResults> &, 
+  void fillHlt(const edm::Handle<edm::TriggerResults> &,
 	       const edm::Handle<trigger::TriggerEvent> &,
 	       const edm::TriggerNames &);
-  
+
   void fillPV(const edm::Handle<std::vector<reco::Vertex> > &);
-  
+
 
   Int_t fillMuons(const edm::Handle<edm::View<reco::Muon> > &,
 		  const edm::Handle<std::vector<reco::Vertex> > &,
 		  const edm::Handle<reco::BeamSpot> &);
 
   void fillL1(const edm::Handle<l1t::MuonBxCollection> &);
+    bool isIsolatedMuon(const reco::Muon& muon) const ;
+  bool isGlobalTightMuon( const reco::Muon& muon ) const ;
+  bool isTrackerTightMuon( const reco::Muon& muon ) const ;
 
-    
+
   // returns false in case the match is for a RPC chamber
   bool getMuonChamberId(DetId & id, muon_pog::MuonDetType & det, Int_t & r, Int_t & phi, Int_t & eta) const ;
-  
+
   edm::EDGetTokenT<edm::TriggerResults> trigResultsToken_;
   edm::EDGetTokenT<trigger::TriggerEvent> trigSummaryToken_;
 
@@ -111,7 +114,7 @@ private:
   edm::EDGetTokenT<GenEventInfoProduct> genInfoToken_;
 
   edm::EDGetTokenT<LumiScalersCollection> scalersToken_;
-    
+
   edm::EDGetTokenT<l1t::MuonBxCollection> l1Token_;
 
   Float_t m_minMuPtCut;
@@ -120,7 +123,7 @@ private:
   muon_pog::Event event_;
   muon_pog::EventId eventId_;
   std::map<std::string,TTree*> tree_;
-  
+
 };
 
 
@@ -131,7 +134,7 @@ MuonPogTreeProducer::MuonPogTreeProducer( const edm::ParameterSet & cfg )
   edm::InputTag tag = cfg.getUntrackedParameter<edm::InputTag>("TrigResultsTag", edm::InputTag("TriggerResults::HLT"));
   if (tag.label() != "none") trigResultsToken_ = consumes<edm::TriggerResults>(tag);
 
-  tag = cfg.getUntrackedParameter<edm::InputTag>("TrigSummaryTag", edm::InputTag("hltTriggerSummaryAOD::HLT")); 
+  tag = cfg.getUntrackedParameter<edm::InputTag>("TrigSummaryTag", edm::InputTag("hltTriggerSummaryAOD::HLT"));
   if (tag.label() != "none") trigSummaryToken_ =consumes<trigger::TriggerEvent>(tag);
 
   trigFilterCut_ = cfg.getUntrackedParameter<std::string>("TrigFilterCut", std::string("all"));
@@ -151,9 +154,9 @@ MuonPogTreeProducer::MuonPogTreeProducer( const edm::ParameterSet & cfg )
 
   tag = cfg.getUntrackedParameter<edm::InputTag>("PFChMetTag", edm::InputTag("pfChMet"));
   if (tag.label() != "none") pfChMetToken_ = consumes<reco::PFMETCollection>(tag);
- 
+
   tag = cfg.getUntrackedParameter<edm::InputTag>("CaloMetTag", edm::InputTag("caloMet"));
-  if (tag.label() != "none") caloMetToken_ = consumes<reco::CaloMETCollection>(tag); 
+  if (tag.label() != "none") caloMetToken_ = consumes<reco::CaloMETCollection>(tag);
 
   tag = cfg.getUntrackedParameter<edm::InputTag>("GenTag", edm::InputTag("prunedGenParticles"));
   if (tag.label() != "none") genToken_ = consumes<reco::GenParticleCollection>(tag);
@@ -162,11 +165,11 @@ MuonPogTreeProducer::MuonPogTreeProducer( const edm::ParameterSet & cfg )
   if (tag.label() != "none") pileUpInfoToken_ = consumes<std::vector<PileupSummaryInfo> >(tag);
 
   tag = cfg.getUntrackedParameter<edm::InputTag>("GenInfoTag", edm::InputTag("generator"));
-  if (tag.label() != "none") genInfoToken_ = consumes<GenEventInfoProduct>(tag);  
+  if (tag.label() != "none") genInfoToken_ = consumes<GenEventInfoProduct>(tag);
 
   tag = cfg.getUntrackedParameter<edm::InputTag>("ScalersTag", edm::InputTag("scalersRawToDigi"));
   if (tag.label() != "none") scalersToken_ = consumes<LumiScalersCollection>(tag);
-    
+
   tag = cfg.getUntrackedParameter<edm::InputTag>("l1MuonsTag", edm::InputTag("gmtStage2Digis:Muon:"));
   if (tag.label() != "none") l1Token_ = consumes<l1t::MuonBxCollection>(tag);
 
@@ -176,9 +179,9 @@ MuonPogTreeProducer::MuonPogTreeProducer( const edm::ParameterSet & cfg )
 }
 
 
-void MuonPogTreeProducer::beginJob() 
+void MuonPogTreeProducer::beginJob()
 {
-  
+
   edm::Service<TFileService> fs;
   tree_["muPogTree"] = fs->make<TTree>("MUONPOGTREE","Muon POG Tree");
 
@@ -191,11 +194,11 @@ void MuonPogTreeProducer::beginJob()
 
 void MuonPogTreeProducer::beginRun(const edm::Run & run, const edm::EventSetup & config )
 {
-  
+
 }
 
 
-void MuonPogTreeProducer::endJob() 
+void MuonPogTreeProducer::endJob()
 {
 
 }
@@ -213,10 +216,10 @@ void MuonPogTreeProducer::analyze (const edm::Event & ev, const edm::EventSetup 
   event_.genParticles.clear();
   event_.genInfos.clear();
   event_.muons.clear();
-  
-  event_.mets.pfMet   = -999; 
-  event_.mets.pfChMet = -999; 
-  event_.mets.caloMet = -999; 
+
+  event_.mets.pfMet   = -999;
+  event_.mets.pfChMet = -999;
+  event_.mets.caloMet = -999;
 
   for (unsigned int ix=0; ix<3; ++ix) {
     event_.primaryVertex[ix] = 0.;
@@ -229,6 +232,7 @@ void MuonPogTreeProducer::analyze (const edm::Event & ev, const edm::EventSetup 
 
   // Fill general information
   // run, luminosity block, event
+  std::cout << "hello" << ev.id().run() << std::endl;
   event_.runNumber = ev.id().run();
   event_.luminosityBlockNumber = ev.id().luminosityBlock();
   event_.eventNumber = ev.id().event();
@@ -236,143 +240,145 @@ void MuonPogTreeProducer::analyze (const edm::Event & ev, const edm::EventSetup 
   eventId_.runNumber = ev.id().run();
   eventId_.luminosityBlockNumber = ev.id().luminosityBlock();
   eventId_.eventNumber = ev.id().event();
-    
+
   // Fill GEN pile up information
-  if (!ev.isRealData()) 
+  if (!ev.isRealData())
     {
       if (!pileUpInfoToken_.isUninitialized() &&
-	  !genInfoToken_.isUninitialized()) 
+	  !genInfoToken_.isUninitialized())
 	{
 	  edm::Handle<std::vector<PileupSummaryInfo> > puInfo;
 	  edm::Handle<GenEventInfoProduct> genInfo;
 
 	  if (ev.getByToken(pileUpInfoToken_, puInfo) &&
-	      ev.getByToken(genInfoToken_, genInfo) ) 
+	      ev.getByToken(genInfoToken_, genInfo) )
 	    fillGenInfo(puInfo,genInfo);
-	  else 
+	  else
 	    edm::LogError("") << "[MuonPogTreeProducer]: Pile-Up Info collection does not exist !!!";
-	}      
+	}
     }
-  
+
 
   // Fill GEN particles information
-  if (!ev.isRealData()) 
+  if (!ev.isRealData())
     {
-      if (!genToken_.isUninitialized() ) 
-	{ 
+      if (!genToken_.isUninitialized() )
+	{
 	  edm::Handle<reco::GenParticleCollection> genParticles;
-	  if (ev.getByToken(genToken_, genParticles)) 
+	  if (ev.getByToken(genToken_, genParticles))
 	    fillGenParticles(genParticles);
-	  else 
+	  else
 	    edm::LogError("") << ">>> GEN collection does not exist !!!";
 	}
     }
 
-  if (ev.isRealData()) 
+  if (ev.isRealData())
     {
 
       event_.bxId  = ev.bunchCrossing();
       event_.orbit = ev.orbitNumber();
 
-      if (!scalersToken_.isUninitialized()) 
-        { 
+      if (!scalersToken_.isUninitialized())
+        {
           edm::Handle<LumiScalersCollection> lumiScalers;
-          if (ev.getByToken(scalersToken_, lumiScalers) && 
-              lumiScalers->size() > 0 ) 
+          if (ev.getByToken(scalersToken_, lumiScalers) &&
+              lumiScalers->size() > 0 )
             event_.instLumi  = lumiScalers->begin()->instantLumi();
-          else 
+          else
             edm::LogError("") << ">>> Scaler collection does not exist !!!";
         }
     }
 
   // Fill trigger information
   if (!trigResultsToken_.isUninitialized() &&
-      !trigSummaryToken_.isUninitialized()) 
+      !trigSummaryToken_.isUninitialized())
     {
-      
+
       edm::Handle<edm::TriggerResults> triggerResults;
       edm::Handle<trigger::TriggerEvent> triggerEvent;
-      
+
       if (ev.getByToken(trigResultsToken_, triggerResults) &&
-	  ev.getByToken(trigSummaryToken_, triggerEvent)) 
+	  ev.getByToken(trigSummaryToken_, triggerEvent))
 	fillHlt(triggerResults, triggerEvent,ev.triggerNames(*triggerResults));
-      else 
+      else
 	edm::LogError("") << "[MuonPogTreeProducer]: Trigger collections do not exist !!!";
     }
-  
-  
+
+
   // Fill vertex information
   edm::Handle<std::vector<reco::Vertex> > vertexes;
 
-  if(!primaryVertexToken_.isUninitialized()) 
+  if(!primaryVertexToken_.isUninitialized())
     {
       if (ev.getByToken(primaryVertexToken_, vertexes))
 	fillPV(vertexes);
-      else 
+      else
 	edm::LogError("") << "[MuonPogTreeProducer]: Vertex collection does not exist !!!";
     }
 
   // Get beam spot for muons
   edm::Handle<reco::BeamSpot> beamSpot;
-  if (!beamSpotToken_.isUninitialized() ) 
-    { 
-      if (!ev.getByToken(beamSpotToken_, beamSpot)) 
+  if (!beamSpotToken_.isUninitialized() )
+    {
+      if (!ev.getByToken(beamSpotToken_, beamSpot))
 	edm::LogError("") << "[MuonPogTreeProducer]: Beam spot collection not found !!!";
     }
 
-  // Fill (raw) MET information: PF, PF charged, Calo    
-  edm::Handle<reco::PFMETCollection> pfMet; 
-  if(!pfMetToken_.isUninitialized()) 
-    { 
-      if (!ev.getByToken(pfMetToken_, pfMet)) 
-	edm::LogError("") << "[MuonPogTreeProducer] PFMet collection does not exist !!!"; 
-      else { 
-	const reco::PFMET &iPfMet = (*pfMet)[0]; 
-	event_.mets.pfMet = iPfMet.et(); 
-      } 
-    } 
+  // Fill (raw) MET information: PF, PF charged, Calo
+  edm::Handle<reco::PFMETCollection> pfMet;
+  if(!pfMetToken_.isUninitialized())
+    {
+      if (!ev.getByToken(pfMetToken_, pfMet))
+	edm::LogError("") << "[MuonPogTreeProducer] PFMet collection does not exist !!!";
+      else {
+	const reco::PFMET &iPfMet = (*pfMet)[0];
+	event_.mets.pfMet = iPfMet.et();
+  event_.mets.pfMetPx = iPfMet.px();
+  event_.mets.pfMetPy = iPfMet.py();
+      }
+    }
 
-  edm::Handle<reco::PFMETCollection> pfChMet; 
-  if(!pfChMetToken_.isUninitialized()) 
-    { 
-      if (!ev.getByToken(pfChMetToken_, pfChMet)) 
-	edm::LogError("") << "[MuonPogTreeProducer] PFChMet collection does not exist !!!"; 
-      else { 
-	const reco::PFMET &iPfChMet = (*pfChMet)[0]; 
-	event_.mets.pfChMet = iPfChMet.et(); 
-      } 
-    } 
+  edm::Handle<reco::PFMETCollection> pfChMet;
+  if(!pfChMetToken_.isUninitialized())
+    {
+      if (!ev.getByToken(pfChMetToken_, pfChMet))
+	edm::LogError("") << "[MuonPogTreeProducer] PFChMet collection does not exist !!!";
+      else {
+	const reco::PFMET &iPfChMet = (*pfChMet)[0];
+	event_.mets.pfChMet = iPfChMet.et();
+      }
+    }
 
-  edm::Handle<reco::CaloMETCollection> caloMet; 
-  if(!caloMetToken_.isUninitialized()) 
-    { 
-      if (!ev.getByToken(caloMetToken_, caloMet)) 
-	edm::LogError("") << "[MuonPogTreeProducer] CaloMet collection does not exist !!!"; 
-      else { 
-	const reco::CaloMET &iCaloMet = (*caloMet)[0]; 
-	event_.mets.caloMet = iCaloMet.et(); 
-      } 
-    } 
+  edm::Handle<reco::CaloMETCollection> caloMet;
+  if(!caloMetToken_.isUninitialized())
+    {
+      if (!ev.getByToken(caloMetToken_, caloMet))
+	edm::LogError("") << "[MuonPogTreeProducer] CaloMet collection does not exist !!!";
+      else {
+	const reco::CaloMET &iCaloMet = (*caloMet)[0];
+	event_.mets.caloMet = iCaloMet.et();
+      }
+    }
 
-  // Get muons  
+  // Get muons
   edm::Handle<edm::View<reco::Muon> > muons;
-  if (!muonToken_.isUninitialized() ) 
-    { 
-      if (!ev.getByToken(muonToken_, muons)) 
+  if (!muonToken_.isUninitialized() )
+    {
+      if (!ev.getByToken(muonToken_, muons))
 	edm::LogError("") << "[MuonPogTreeProducer] Muon collection does not exist !!!";
     }
-  
+
 
   Int_t nGoodMuons = 0;
   eventId_.maxPTs.clear();
   // Fill muon information
-  if (muons.isValid() && vertexes.isValid() && beamSpot.isValid()) 
+  if (muons.isValid() && vertexes.isValid() && beamSpot.isValid())
     {
       nGoodMuons = fillMuons(muons,vertexes,beamSpot);
     }
   eventId_.nMuons = nGoodMuons;
 
-    
+
   //Fill L1 informations
   edm::Handle<l1t::MuonBxCollection> l1s;
   if (!l1Token_.isUninitialized() )
@@ -383,7 +389,7 @@ void MuonPogTreeProducer::analyze (const edm::Event & ev, const edm::EventSetup 
             fillL1(l1s);
         }
     }
-    
+
   if (nGoodMuons >= m_minNMuCut)
   tree_["muPogTree"]->Fill();
 
@@ -394,42 +400,42 @@ void MuonPogTreeProducer::fillGenInfo(const edm::Handle<std::vector<PileupSummar
 {
 
   muon_pog::GenInfo genInfo;
-  
+
   genInfo.trueNumberOfInteractions     = -1.;
   genInfo.actualNumberOfInteractions   = -1.;
   genInfo.genWeight = gen->weight() ;
-	
+
   std::vector<PileupSummaryInfo>::const_iterator puInfoIt  = puInfo->begin();
   std::vector<PileupSummaryInfo>::const_iterator puInfoEnd = puInfo->end();
 
-  for(; puInfoIt != puInfoEnd; ++puInfoIt) 
+  for(; puInfoIt != puInfoEnd; ++puInfoIt)
     {
       int bx = puInfoIt->getBunchCrossing();
-	  
-      if(bx == 0) 
-	{ 
+
+      if(bx == 0)
+	{
 	  genInfo.trueNumberOfInteractions   = puInfoIt->getTrueNumInteractions();
 	  genInfo.actualNumberOfInteractions = puInfoIt->getPU_NumInteractions();
 	  continue;
 	}
     }
-  
+
   event_.genInfos.push_back(genInfo);
-  
+
 }
 
 
 void MuonPogTreeProducer::fillGenParticles(const edm::Handle<reco::GenParticleCollection> & genParticles)
 {
-  
+
   unsigned int gensize = genParticles->size();
-  
+
   // Do not record the initial protons
-  for (unsigned int i=0; i<gensize; ++i) 
+  for (unsigned int i=0; i<gensize; ++i)
     {
 
       const reco::GenParticle& part = genParticles->at(i);
-    
+
       muon_pog::GenParticle gensel;
       gensel.pdgId = part.pdgId();
       gensel.status = part.status();
@@ -446,73 +452,73 @@ void MuonPogTreeProducer::fillGenParticles(const edm::Handle<reco::GenParticleCo
       reco::GenStatusFlags statusflags = part.statusFlags();
       if (statusflags.flags_.size() == 15)
 	for (unsigned int flag = 0; flag < statusflags.flags_.size(); ++flag)
-	  gensel.flags.push_back(statusflags.flags_[flag]);      
-      
+	  gensel.flags.push_back(statusflags.flags_[flag]);
+
       gensel.mothers.clear();
       unsigned int nMothers = part.numberOfMothers();
 
-      for (unsigned int iMother=0; iMother<nMothers; ++iMother) 
+      for (unsigned int iMother=0; iMother<nMothers; ++iMother)
 	{
 	  gensel.mothers.push_back(part.motherRef(iMother)->pdgId());
 	}
 
       // Protect agains bug in genParticles (missing mother => first proton)
       if (i>=2 && nMothers==0) gensel.mothers.push_back(0);
-      
+
       event_.genParticles.push_back(gensel);
     }
-  
+
 }
 
 
-void MuonPogTreeProducer::fillHlt(const edm::Handle<edm::TriggerResults> & triggerResults, 
+void MuonPogTreeProducer::fillHlt(const edm::Handle<edm::TriggerResults> & triggerResults,
 				  const edm::Handle<trigger::TriggerEvent> & triggerEvent,
 				  const edm::TriggerNames & triggerNames)
-{    
+{
 
-  for (unsigned int iTrig=0; iTrig<triggerNames.size(); ++iTrig) 
+  for (unsigned int iTrig=0; iTrig<triggerNames.size(); ++iTrig)
     {
-      
-      if (triggerResults->accept(iTrig)) 
+
+      if (triggerResults->accept(iTrig))
 	{
 	  std::string pathName = triggerNames.triggerName(iTrig);
 	  if (trigPathCut_ == "all" || pathName.find(trigPathCut_) != std::string::npos)
 	    event_.hlt.triggers.push_back(pathName);
 	}
     }
-      
+
   const trigger::size_type nFilters(triggerEvent->sizeFilters());
 
-  for (trigger::size_type iFilter=0; iFilter!=nFilters; ++iFilter) 
+  for (trigger::size_type iFilter=0; iFilter!=nFilters; ++iFilter)
     {
-	
+
       std::string filterTag = triggerEvent->filterTag(iFilter).encode();
-      
+
       if (trigFilterCut_ == "all" || filterTag.find(trigFilterCut_) != std::string::npos)
 	{
 
 	  trigger::Keys objectKeys = triggerEvent->filterKeys(iFilter);
 	  const trigger::TriggerObjectCollection& triggerObjects(triggerEvent->getObjects());
-	
-	  for (trigger::size_type iKey=0; iKey<objectKeys.size(); ++iKey) 
-	    {  
+
+	  for (trigger::size_type iKey=0; iKey<objectKeys.size(); ++iKey)
+	    {
 	      trigger::size_type objKey = objectKeys.at(iKey);
 	      const trigger::TriggerObject& triggerObj(triggerObjects[objKey]);
-	      
+
 	      muon_pog::HLTObject hltObj;
-	      
+
 	      float trigObjPt = triggerObj.pt();
 	      float trigObjEta = triggerObj.eta();
 	      float trigObjPhi = triggerObj.phi();
-	      
+
 	      hltObj.filterTag = filterTag;
-	      
+
 	      hltObj.pt  = trigObjPt;
 	      hltObj.eta = trigObjEta;
 	      hltObj.phi = trigObjPhi;
-	      
+
 	      event_.hlt.objects.push_back(hltObj);
-	      
+
 	    }
 	}
     }
@@ -522,7 +528,7 @@ void MuonPogTreeProducer::fillHlt(const edm::Handle<edm::TriggerResults> & trigg
 void MuonPogTreeProducer::fillL1(const edm::Handle<l1t::MuonBxCollection> & l1MuonBxColl)
 {
 
-  for (int ibx = l1MuonBxColl->getFirstBX(); ibx <= l1MuonBxColl->getLastBX(); ++ibx) 
+  for (int ibx = l1MuonBxColl->getFirstBX(); ibx <= l1MuonBxColl->getLastBX(); ++ibx)
     {
       for (auto l1MuIt = l1MuonBxColl->begin(ibx); l1MuIt != l1MuonBxColl->end(ibx); ++l1MuIt)
 	{
@@ -532,14 +538,14 @@ void MuonPogTreeProducer::fillL1(const edm::Handle<l1t::MuonBxCollection> & l1Mu
 	  l1part.eta = l1MuIt->eta();
 	  l1part.phi = l1MuIt->phi();
 	  l1part.charge = l1MuIt->hwChargeValid() ? l1MuIt->charge() : 0;
-	  
+
 	  l1part.quality = l1MuIt->hwQual();
 	  l1part.bx = ibx;
-	  
+
 	  l1part.tfIndex = l1MuIt->tfMuonIndex();
-	  
+
 	  event_.l1muons.push_back(l1part);
-	  
+
 	}
     }
 }
@@ -548,13 +554,13 @@ void MuonPogTreeProducer::fillL1(const edm::Handle<l1t::MuonBxCollection> & l1Mu
 
 void MuonPogTreeProducer::fillPV(const edm::Handle<std::vector<reco::Vertex> > & vertexes)
 {
-      
+
   int nVtx = 0;
 
   std::vector<reco::Vertex>::const_iterator vertexIt  = vertexes->begin();
   std::vector<reco::Vertex>::const_iterator vertexEnd = vertexes->end();
 
-  for (; vertexIt != vertexEnd; ++vertexIt) 
+  for (; vertexIt != vertexEnd; ++vertexIt)
     {
 
       const reco::Vertex& vertex = *vertexIt;
@@ -562,24 +568,24 @@ void MuonPogTreeProducer::fillPV(const edm::Handle<std::vector<reco::Vertex> > &
       if (!vertex.isValid()) continue;
       ++nVtx;
 
-      if (vertexIt == vertexes->begin()) 
+      if (vertexIt == vertexes->begin())
 	{
 	  event_.primaryVertex[0] = vertex.x();
 	  event_.primaryVertex[1] = vertex.y();
 	  event_.primaryVertex[2] = vertex.z();
 
-	  for (unsigned int ix=0; ix<3; ++ix) 
+	  for (unsigned int ix=0; ix<3; ++ix)
 	    {
-	      for (unsigned int iy=0; iy<3; ++iy) 
+	      for (unsigned int iy=0; iy<3; ++iy)
 		{
 		  event_.cov_primaryVertex[ix][iy] = vertex.covariance(ix,iy);
 		}
 	    }
 	}
     }
-  
+
   event_.nVtx = nVtx;
-  
+
 }
 
 
@@ -587,36 +593,35 @@ Int_t MuonPogTreeProducer::fillMuons(const edm::Handle<edm::View<reco::Muon> > &
 				     const edm::Handle<std::vector<reco::Vertex> > & vertexes,
 				     const edm::Handle<reco::BeamSpot> & beamSpot)
 {
-  
+
   edm::View<reco::Muon>::const_iterator muonIt  = muons->begin();
   edm::View<reco::Muon>::const_iterator muonEnd = muons->end();
-  
-  for (; muonIt != muonEnd; ++muonIt) 
+
+  for (; muonIt != muonEnd; ++muonIt)
     {
-      
+
 
       const reco::Muon& mu = (*muonIt);
-      
+
       bool isGlobal      = mu.isGlobalMuon();
       bool isTracker     = mu.isTrackerMuon();
-      bool isTrackerArb  = muon::isGoodMuon(mu, muon::TrackerMuonArbitrated); 
+      bool isTrackerArb  = muon::isGoodMuon(mu, muon::TrackerMuonArbitrated);
       bool isRPC         = mu.isRPCMuon();
       bool isStandAlone  = mu.isStandAloneMuon();
       bool isPF          = mu.isPFMuon();
 
       bool hasInnerTrack = !mu.innerTrack().isNull();
-      bool hasTunePTrack = !mu.tunePMuonBestTrack().isNull();
+/*      bool hasTunePTrack = !mu.tunePMuonBestTrack().isNull();
       bool hasPickyTrack = !mu.pickyTrack().isNull();
       bool hasDytTrack = !mu.dytTrack().isNull();
       bool hasTpfmsTrack = !mu.tpfmsTrack().isNull();
-      
+  */
       muon_pog::Muon ntupleMu;
-      
+
       ntupleMu.pt     = mu.pt();
       ntupleMu.eta    = mu.eta();
       ntupleMu.phi    = mu.phi();
       ntupleMu.charge = mu.charge();
-
       ntupleMu.fits.push_back(muon_pog::MuonFit(mu.pt(),mu.eta(),mu.phi(),
 						mu.charge(),mu.muonBestTrack()->ptError()));
 
@@ -638,117 +643,130 @@ Int_t MuonPogTreeProducer::fillMuons(const edm::Handle<edm::View<reco::Muon> > &
 						isGlobal ? mu.globalTrack()->charge()  : -1000.,
 						isGlobal ? mu.globalTrack()->ptError() : -1000.));
 
-      ntupleMu.fits.push_back(muon_pog::MuonFit(hasTunePTrack ? mu.tunePMuonBestTrack()->pt()  : -1000.,
+ntupleMu.fits.push_back(muon_pog::MuonFit(1, 0, 0, 1, 0));
+ntupleMu.fits.push_back(muon_pog::MuonFit(1, 0, 0, 1, 0));
+ntupleMu.fits.push_back(muon_pog::MuonFit(1, 0, 0, 1, 0));
+ntupleMu.fits.push_back(muon_pog::MuonFit(1, 0, 0, 1, 0));
+   /*   ntupleMu.fits.push_back(muon_pog::MuonFit(hasTunePTrack ? mu.tunePMuonBestTrack()->pt()  : -1000.,
 						hasTunePTrack ? mu.tunePMuonBestTrack()->eta() : -1000.,
 						hasTunePTrack ? mu.tunePMuonBestTrack()->phi() : -1000.,
 						hasTunePTrack ? mu.tunePMuonBestTrack()->charge()  : -1000.,
 						hasTunePTrack ? mu.tunePMuonBestTrack()->ptError() : -1000.));
-        
+
       ntupleMu.fits.push_back(muon_pog::MuonFit(hasPickyTrack ? mu.pickyTrack()->pt()  : -1000.,
                         hasPickyTrack ? mu.pickyTrack()->eta() : -1000.,
                         hasPickyTrack ? mu.pickyTrack()->phi() : -1000.,
                         hasPickyTrack ? mu.pickyTrack()->charge()  : -1000.,
                         hasPickyTrack ? mu.pickyTrack()->ptError() : -1000.));
-        
+
       ntupleMu.fits.push_back(muon_pog::MuonFit(hasDytTrack ? mu.dytTrack()->pt()  : -1000.,
                         hasDytTrack ? mu.dytTrack()->eta() : -1000.,
                         hasDytTrack ? mu.dytTrack()->phi() : -1000.,
                         hasDytTrack ? mu.dytTrack()->charge()  : -1000.,
                         hasDytTrack ? mu.dytTrack()->ptError() : -1000.));
-        
+
       ntupleMu.fits.push_back(muon_pog::MuonFit(hasTpfmsTrack ? mu.tpfmsTrack()->pt()  : -1000.,
                         hasTpfmsTrack ? mu.tpfmsTrack()->eta() : -1000.,
                         hasTpfmsTrack ? mu.tpfmsTrack()->phi() : -1000.,
                         hasTpfmsTrack ? mu.tpfmsTrack()->charge()  : -1000.,
                         hasTpfmsTrack ? mu.tpfmsTrack()->ptError() : -1000.));
-
+*/
       // Detector Based Isolation
       reco::MuonIsolation detIso03 = mu.isolationR03();
 
       ntupleMu.trackerIso = detIso03.sumPt;
       ntupleMu.EMCalIso   = detIso03.emEt;
       ntupleMu.HCalIso    = detIso03.hadEt;
-      
+
       // PF Isolation
       reco::MuonPFIsolation pfIso04 = mu.pfIsolationR04();
       reco::MuonPFIsolation pfIso03 = mu.pfIsolationR03();
 
       ntupleMu.chargedHadronIso   = pfIso04.sumChargedHadronPt;
-      ntupleMu.chargedHadronIsoPU = pfIso04.sumPUPt; 
+      ntupleMu.chargedHadronIsoPU = pfIso04.sumPUPt;
       ntupleMu.neutralHadronIso   = pfIso04.sumNeutralHadronEt;
       ntupleMu.photonIso          = pfIso04.sumPhotonEt;
 
-      ntupleMu.isGlobal     = isGlobal ? 1 : 0;	
-      ntupleMu.isTracker    = isTracker ? 1 : 0;	
-      ntupleMu.isTrackerArb = isTrackerArb ? 1 : 0;	
+      ntupleMu.isGlobal     = isGlobal ? 1 : 0;
+      ntupleMu.isTracker    = isTracker ? 1 : 0;
+      ntupleMu.isTrackerArb = isTrackerArb ? 1 : 0;
       ntupleMu.isRPC        = isRPC ? 1 : 0;
       ntupleMu.isStandAlone = isStandAlone ? 1 : 0;
       ntupleMu.isPF         = isPF ? 1 : 0;
 
-      ntupleMu.nHitsGlobal     = isGlobal     ? mu.globalTrack()->numberOfValidHits() : -999;	
-      ntupleMu.nHitsTracker    = isTracker    ? mu.innerTrack()->numberOfValidHits()  : -999;	
+      ntupleMu.nHitsGlobal     = isGlobal     ? mu.globalTrack()->numberOfValidHits() : -999;
+      ntupleMu.nHitsTracker    = isTracker    ? mu.innerTrack()->numberOfValidHits()  : -999;
       ntupleMu.nHitsStandAlone = isStandAlone ? mu.outerTrack()->numberOfValidHits()  : -999;
 
-      ntupleMu.glbNormChi2              = isGlobal      ? mu.globalTrack()->normalizedChi2() : -999; 
-      ntupleMu.trkNormChi2	        = hasInnerTrack ? mu.innerTrack()->normalizedChi2()  : -999; 
-      ntupleMu.trkMuonMatchedStations   = isTracker     ? mu.numberOfMatchedStations()       : -999; 
-      ntupleMu.glbMuonValidHits	        = isGlobal      ? mu.globalTrack()->hitPattern().numberOfValidMuonHits()       : -999; 
-      ntupleMu.trkPixelValidHits	= hasInnerTrack ? mu.innerTrack()->hitPattern().numberOfValidPixelHits()       : -999; 
-      ntupleMu.trkPixelLayersWithMeas   = hasInnerTrack ? mu.innerTrack()->hitPattern().pixelLayersWithMeasurement()   : -999; 
-      ntupleMu.trkTrackerLayersWithMeas = hasInnerTrack ? mu.innerTrack()->hitPattern().trackerLayersWithMeasurement() : -999; 
+      ntupleMu.glbNormChi2              = isGlobal      ? mu.globalTrack()->normalizedChi2() : -999;
+      ntupleMu.trkNormChi2	        = hasInnerTrack ? mu.innerTrack()->normalizedChi2()  : -999;
+      ntupleMu.trkMuonMatchedStations   = isTracker     ? mu.numberOfMatchedStations()       : -999;
+      ntupleMu.glbMuonValidHits	        = isGlobal      ? mu.globalTrack()->hitPattern().numberOfValidMuonHits()       : -999;
+      ntupleMu.trkPixelValidHits	= hasInnerTrack ? mu.innerTrack()->hitPattern().numberOfValidPixelHits()       : -999;
+      ntupleMu.trkPixelLayersWithMeas   = hasInnerTrack ? mu.innerTrack()->hitPattern().pixelLayersWithMeasurement()   : -999;
+      ntupleMu.trkTrackerLayersWithMeas = hasInnerTrack ? mu.innerTrack()->hitPattern().trackerLayersWithMeasurement() : -999;
 
-      ntupleMu.bestMuPtErr              = mu.muonBestTrack()->ptError(); 
+      ntupleMu.bestMuPtErr              = mu.muonBestTrack()->ptError();
 
-      ntupleMu.trkValidHitFrac = hasInnerTrack           ? mu.innerTrack()->validFraction()       : -999; 
-      ntupleMu.trkStaChi2      = isGlobal                ? mu.combinedQuality().chi2LocalPosition : -999; 
-      ntupleMu.trkKink         = isGlobal                ? mu.combinedQuality().trkKink           : -999; 
-      ntupleMu.muSegmComp      = (isGlobal || isTracker) ? muon::segmentCompatibility(mu)         : -999; 
+      ntupleMu.trkValidHitFrac = hasInnerTrack           ? mu.innerTrack()->validFraction()       : -999;
+      ntupleMu.trkStaChi2      = isGlobal                ? mu.combinedQuality().chi2LocalPosition : -999;
+      ntupleMu.trkKink         = isGlobal                ? mu.combinedQuality().trkKink           : -999;
+      ntupleMu.muSegmComp      = (isGlobal || isTracker) ? muon::segmentCompatibility(mu)         : -999;
 
-      ntupleMu.isTrkMuOST               = muon::isGoodMuon(mu, muon::TMOneStationTight) ? 1 : 0; 
-      ntupleMu.isTrkHP                  = hasInnerTrack && mu.innerTrack()->quality(reco::TrackBase::highPurity) ? 1 : 0; 
+      ntupleMu.isTrkMuOST               = muon::isGoodMuon(mu, muon::TMOneStationTight) ? 1 : 0;
+      ntupleMu.isTrkHP                  = hasInnerTrack && mu.innerTrack()->quality(reco::TrackBase::highPurity) ? 1 : 0;
 
-      if ( mu.isMatchesValid() && ntupleMu.isTrackerArb )
+      //trackAlgo
+      ntupleMu.originalAlgo = (isGlobal || isTracker) ? mu.innerTrack()->originalAlgo() : -999;
+      ntupleMu.finalAlgo = (isGlobal || isTracker) ? mu.innerTrack()->algo() : 999;
+
+      //PF info
+      ntupleMu.isGlobalTightMuon = isGlobalTightMuon(mu);
+      ntupleMu.isTrackerTightMuon= isTrackerTightMuon(mu);
+      ntupleMu.isIsolatedMuon = isIsolatedMuon(mu);
+
+if ( mu.isMatchesValid() && ntupleMu.isTrackerArb )
 	{
 	  for ( reco::MuonChamberMatch match : mu.matches() )
 	    {
 	      muon_pog::ChambMatch ntupleMatch;
-	      
+
 	      if ( getMuonChamberId(match.id,
 				    ntupleMatch.type,ntupleMatch.r,
 				    ntupleMatch.phi,ntupleMatch.eta)
 		   )
 		{
-	      
+
 		  ntupleMatch.errxTk = mu.trackXErr(match.station(),match.detector());
 		  ntupleMatch.erryTk = mu.trackYErr(match.station(),match.detector());
 
 		  ntupleMatch.errDxDzTk = mu.trackDxDzErr(match.station(),match.detector());
 		  ntupleMatch.errDyDzTk = mu.trackDyDzErr(match.station(),match.detector());
-	      
+
 		  ntupleMatch.dx = mu.dX(match.station(),match.detector());
 		  ntupleMatch.dy = mu.dY(match.station(),match.detector());
 		  ntupleMatch.dDxDz = mu.dDxDz(match.station(),match.detector());
 		  ntupleMatch.dDyDz = mu.dDxDz(match.station(),match.detector());
-		  
+
 		  ntupleMatch.errxSeg = mu.segmentXErr(match.station(),match.detector());
 		  ntupleMatch.errySeg = mu.segmentYErr(match.station(),match.detector());
 		  ntupleMatch.errDxDzSeg = mu.segmentDxDzErr(match.station(),match.detector());
 		  ntupleMatch.errDyDzSeg = mu.segmentDyDzErr(match.station(),match.detector());
-		  
+
 		  ntupleMu.matches.push_back(ntupleMatch);
 		}
 	    }
 	}
-      
-      ntupleMu.dxyBest  = -999; 
-      ntupleMu.dzBest   = -999; 
-      ntupleMu.dxyInner = -999; 
-      ntupleMu.dzInner  = -999; 
 
-      ntupleMu.isoPflow04 = (pfIso04.sumChargedHadronPt+ 
+      ntupleMu.dxyBest  = -999;
+      ntupleMu.dzBest   = -999;
+      ntupleMu.dxyInner = -999;
+      ntupleMu.dzInner  = -999;
+
+      ntupleMu.isoPflow04 = (pfIso04.sumChargedHadronPt+
 			     std::max(0.,pfIso04.sumPhotonEt+pfIso04.sumNeutralHadronEt - 0.5*pfIso04.sumPUPt)) / mu.pt();
-    
-      ntupleMu.isoPflow03 = (pfIso03.sumChargedHadronPt+ 
+
+      ntupleMu.isoPflow03 = (pfIso03.sumChargedHadronPt+
 			     std::max(0.,pfIso03.sumPhotonEt+pfIso03.sumNeutralHadronEt - 0.5*pfIso03.sumPUPt)) / mu.pt();
 
       double dxybs = isGlobal ? mu.globalTrack()->dxy(beamSpot->position()) :
@@ -759,11 +777,11 @@ Int_t MuonPogTreeProducer::fillMuons(const edm::Handle<edm::View<reco::Muon> > &
       double dxy = -1000.;
       double dz  = -1000.;
 
-      ntupleMu.isSoft    = 0;	  
-      ntupleMu.isTight   = 0;	  
+      ntupleMu.isSoft    = 0;
+      ntupleMu.isTight   = 0;
       ntupleMu.isHighPt  = 0;
-      ntupleMu.isLoose   = muon::isLooseMuon(mu)  ? 1 : 0;	  
-      ntupleMu.isMedium  = muon::isMediumMuon(mu) ? 1 : 0;	  
+      ntupleMu.isLoose   = muon::isLooseMuon(mu)  ? 1 : 0;
+      ntupleMu.isMedium  = muon::isMediumMuon(mu) ? 1 : 0;
 
       if (vertexes->size() > 0)
 	{
@@ -773,16 +791,16 @@ Int_t MuonPogTreeProducer::fillMuons(const edm::Handle<edm::View<reco::Muon> > &
 	    hasInnerTrack ? mu.innerTrack()->dxy(vertex.position()) : -1000;
 	  dz = isGlobal ? mu.globalTrack()->dz(vertex.position()) :
 	    hasInnerTrack ? mu.innerTrack()->dz(vertex.position()) : -1000;
- 
-	  ntupleMu.dxyBest  = mu.muonBestTrack()->dxy(vertex.position()); 
-	  ntupleMu.dzBest   = mu.muonBestTrack()->dz(vertex.position()); 
-	  if(hasInnerTrack) { 
-	    ntupleMu.dxyInner = mu.innerTrack()->dxy(vertex.position()); 
-	    ntupleMu.dzInner  = mu.innerTrack()->dz(vertex.position()); 
-	  } 
 
-	  ntupleMu.isSoft    = muon::isSoftMuon(mu,vertex)   ? 1 : 0;	  
-	  ntupleMu.isTight   = muon::isTightMuon(mu,vertex)  ? 1 : 0;	  
+	  ntupleMu.dxyBest  = mu.muonBestTrack()->dxy(vertex.position());
+	  ntupleMu.dzBest   = mu.muonBestTrack()->dz(vertex.position());
+	  if(hasInnerTrack) {
+	    ntupleMu.dxyInner = mu.innerTrack()->dxy(vertex.position());
+	    ntupleMu.dzInner  = mu.innerTrack()->dz(vertex.position());
+	  }
+
+	  ntupleMu.isSoft    = muon::isSoftMuon(mu,vertex)   ? 1 : 0;
+	  ntupleMu.isTight   = muon::isTightMuon(mu,vertex)  ? 1 : 0;
 	  ntupleMu.isHighPt  = muon::isHighPtMuon(mu,vertex) ? 1 : 0;
 
 	}
@@ -795,27 +813,27 @@ Int_t MuonPogTreeProducer::fillMuons(const edm::Handle<edm::View<reco::Muon> > &
       ntupleMu.dxybs  = dxybs;
       ntupleMu.dzbs   = dzbs;
 
-      if(mu.isTimeValid()) { 
-	ntupleMu.muonTimeDof = mu.time().nDof; 
-	ntupleMu.muonTime    = mu.time().timeAtIpInOut; 
-	ntupleMu.muonTimeErr = mu.time().timeAtIpInOutErr; 
-      } 
-      else { 
-	ntupleMu.muonTimeDof = -999; 
-	ntupleMu.muonTime    = -999; 
-	ntupleMu.muonTimeErr = -999; 
-      } 
+      if(mu.isTimeValid()) {
+	ntupleMu.muonTimeDof = mu.time().nDof;
+	ntupleMu.muonTime    = mu.time().timeAtIpInOut;
+	ntupleMu.muonTimeErr = mu.time().timeAtIpInOutErr;
+      }
+      else {
+	ntupleMu.muonTimeDof = -999;
+	ntupleMu.muonTime    = -999;
+	ntupleMu.muonTimeErr = -999;
+      }
 
-      if(mu.rpcTime().nDof > 0) { 
-	ntupleMu.muonRpcTimeDof = mu.rpcTime().nDof; 
-	ntupleMu.muonRpcTime    = mu.rpcTime().timeAtIpInOut; 
-	ntupleMu.muonRpcTimeErr = mu.rpcTime().timeAtIpInOutErr; 
-      } 
-      else { 
-	ntupleMu.muonRpcTimeDof = -999; 
-	ntupleMu.muonRpcTime    = -999; 
-	ntupleMu.muonRpcTimeErr = -999; 
-      } 
+      if(mu.rpcTime().nDof > 0) {
+	ntupleMu.muonRpcTimeDof = mu.rpcTime().nDof;
+	ntupleMu.muonRpcTime    = mu.rpcTime().timeAtIpInOut;
+	ntupleMu.muonRpcTimeErr = mu.rpcTime().timeAtIpInOutErr;
+      }
+      else {
+	ntupleMu.muonRpcTimeDof = -999;
+	ntupleMu.muonRpcTime    = -999;
+	ntupleMu.muonRpcTimeErr = -999;
+      }
 
       // asking for a TRK or GLB muon with minimal pT cut
       // ignoring STA muons in this logic
@@ -834,7 +852,7 @@ Int_t MuonPogTreeProducer::fillMuons(const edm::Handle<edm::View<reco::Muon> > &
           )
       {
         event_.muons.push_back(ntupleMu);
-        
+
         std::vector<Float_t> PTs = {ntupleMu.fitPt(muon_pog::MuonFitType::DEFAULT),
                          ntupleMu.fitPt(muon_pog::MuonFitType::GLB),
                          ntupleMu.fitPt(muon_pog::MuonFitType::TUNEP),
@@ -857,8 +875,8 @@ bool MuonPogTreeProducer::getMuonChamberId(DetId & id, muon_pog::MuonDetType & d
 
   if (id.det() == DetId::Muon && id.subdetId() == MuonSubdetId::DT)
     {
-      DTChamberId dtId(id.rawId());  
-  
+      DTChamberId dtId(id.rawId());
+
       det = muon_pog::MuonDetType::DT;
       r   = dtId.station();
       phi = dtId.sector();
@@ -870,7 +888,7 @@ bool MuonPogTreeProducer::getMuonChamberId(DetId & id, muon_pog::MuonDetType & d
   if (id.det() == DetId::Muon && id.subdetId() == MuonSubdetId::CSC)
     {
       CSCDetId cscId(id.rawId());
-    
+
       det = muon_pog::MuonDetType::CSC;
       r   = cscId.station() * cscId.zendcap();
       phi = cscId.chamber();
@@ -880,9 +898,134 @@ bool MuonPogTreeProducer::getMuonChamberId(DetId & id, muon_pog::MuonDetType & d
     }
 
   return false;
-      
+
 }
 
+bool MuonPogTreeProducer::isGlobalTightMuon( const reco::Muon& muon ) const
+{
+
+  if ( !muon.isGlobalMuon() ) return false;
+  if ( !muon.isStandAloneMuon() ) return false;
+
+
+  if ( muon.isTrackerMuon() ) {
+
+    bool result = muon::isGoodMuon(muon,muon::GlobalMuonPromptTight);
+
+    bool isTM2DCompatibilityTight =  muon::isGoodMuon(muon,muon::TM2DCompatibilityTight);
+    int nMatches = muon.numberOfMatches();
+    bool quality = nMatches > 2 || isTM2DCompatibilityTight;
+
+    return result && quality;
+
+  } else {
+
+    reco::TrackRef standAloneMu = muon.standAloneMuon();
+
+    // No tracker muon -> Request a perfect stand-alone muon, or an even better global muon
+    bool result = false;
+
+    // Check the quality of the stand-alone muon :
+    // good chi**2 and large number of hits and good pt error
+    if ( ( standAloneMu->hitPattern().numberOfValidMuonDTHits() < 22 &&
+	   standAloneMu->hitPattern().numberOfValidMuonCSCHits() < 15 ) ||
+	 standAloneMu->normalizedChi2() > 10. ||
+	 standAloneMu->ptError()/standAloneMu->pt() > 0.20 ) {
+      result = false;
+    } else {
+
+      reco::TrackRef combinedMu = muon.combinedMuon();
+      reco::TrackRef trackerMu = muon.track();
+
+      // If the stand-alone muon is good, check the global muon
+      if ( combinedMu->normalizedChi2() > standAloneMu->normalizedChi2() ) {
+	// If the combined muon is worse than the stand-alone, it
+	// means that either the corresponding tracker track was not
+	// reconstructed, or that the sta muon comes from a late
+	// pion decay (hence with a momentum smaller than the track)
+	// Take the stand-alone muon only if its momentum is larger
+	// than that of the track
+	result = standAloneMu->pt() > trackerMu->pt() ;
+      } else {
+	// If the combined muon is better (and good enough), take the
+	// global muon
+	result =
+	  combinedMu->ptError()/combinedMu->pt() <
+	  std::min(0.20,standAloneMu->ptError()/standAloneMu->pt());
+      }
+    }
+
+    return result;
+  }
+
+  return false;
+
+}
+
+bool MuonPogTreeProducer::isTrackerTightMuon( const reco::Muon& muon ) const
+{
+
+  if(!muon.isTrackerMuon()) return false;
+
+  reco::TrackRef trackerMu = muon.track();
+  const reco::Track& track = *trackerMu;
+
+  unsigned nTrackerHits =  track.hitPattern().numberOfValidTrackerHits();
+
+  if(nTrackerHits<=12) return false;
+
+  bool isAllArbitrated = muon::isGoodMuon(muon,muon::AllArbitrated);
+
+  bool isTM2DCompatibilityTight = muon::isGoodMuon(muon,muon::TM2DCompatibilityTight);
+
+  if(!isAllArbitrated || !isTM2DCompatibilityTight)  return false;
+
+  if((trackerMu->ptError()/trackerMu->pt() > 0.10)){
+    //std::cout<<" PT ERROR > 10 % "<< trackerMu->pt() <<std::endl;
+    return false;
+  }
+  return true;
+
+}
+
+bool MuonPogTreeProducer::isIsolatedMuon( const reco::Muon& muon ) const
+{
+
+  if ( !muon.isIsolationValid() ) return false;
+
+  // Isolated Muons which are missed by standard cuts are nearly always global+tracker
+  if ( !muon.isGlobalMuon() ) return false;
+
+  // If it's not a tracker muon, only take it if there are valid muon hits
+
+  reco::TrackRef standAloneMu = muon.standAloneMuon();
+
+  if ( !muon.isTrackerMuon() ){
+    if(standAloneMu->hitPattern().numberOfValidMuonDTHits() == 0 &&
+       standAloneMu->hitPattern().numberOfValidMuonCSCHits() ==0) return false;
+  }
+
+  // for isolation, take the smallest pt available to reject fakes
+
+  reco::TrackRef combinedMu = muon.combinedMuon();
+  double smallestMuPt = combinedMu->pt();
+
+  if(standAloneMu->pt()<smallestMuPt) smallestMuPt = standAloneMu->pt();
+
+  if(muon.isTrackerMuon())
+    {
+      reco::TrackRef trackerMu = muon.track();
+      if(trackerMu->pt() < smallestMuPt) smallestMuPt= trackerMu->pt();
+    }
+
+  double sumPtR03 = muon.isolationR03().sumPt;
+
+  double relIso = sumPtR03/smallestMuPt;
+
+  if(relIso<0.1) return true;
+  else return false;
+
+}
 
 #include "FWCore/Framework/interface/MakerMacros.h"
 
