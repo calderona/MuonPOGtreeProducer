@@ -22,6 +22,8 @@
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "DataFormats/BeamSpot/interface/BeamSpot.h"
 
+#include "DataFormats/Math/interface/deltaR.h"
+
 #include "DataFormats/Common/interface/View.h"
 
 #include "DataFormats/PatCandidates/interface/Muon.h"
@@ -90,7 +92,44 @@ private:
     bool isIsolatedMuon(const reco::Muon& muon) const ;
   bool isGlobalTightMuon( const reco::Muon& muon ) const ;
   bool isTrackerTightMuon( const reco::Muon& muon ) const ;
+  bool outInOnly(const reco::Muon &mu) const {
+      const reco::Track &tk = *mu.innerTrack();
+      return tk.algoMask().count() == 1 && tk.isAlgoInMask(reco::Track::muonSeededStepOutIn);
+  }
+  bool preselection(const reco::Muon &mu, bool willSelectClone) const {
+      return mu.isGlobalMuon() && (!willSelectClone || outInOnly(mu));
+  }
+  bool tighterId(const reco::Muon &mu) const {
+      return muon::isMediumMuon(mu) && mu.numberOfMatchedStations() >= 2;
+  }
+  bool tightGlobal(const reco::Muon &mu) const {
+      return (mu.globalTrack()->hitPattern().muonStationsWithValidHits() >= 3 && mu.globalTrack()->normalizedChi2() <= 20);
+  }
+  bool safeId(const reco::Muon &mu) const {
+      if (mu.muonBestTrack()->ptError() > 0.2 * mu.muonBestTrack()->pt()) { return false; }
+      return mu.numberOfMatchedStations() >= 1 || tightGlobal(mu);
+  }
+  bool partnerId(const reco::Muon &mu) const {
+      return mu.pt() >= 10 && mu.numberOfMatchedStations() >= 1;
+  }
 
+  int checkIsGoodMuon(const reco::Muon &mu, reco::Vertex vertex, bool doSelectClones) const {
+    if (preselection(mu, doSelectClones)) {
+          float dxypv = std::abs(mu.innerTrack()->dxy(vertex.position()));
+          float dzpv  = std::abs(mu.innerTrack()->dz(vertex.position()));
+          if (tighterId(mu)) {
+              bool ipLoose = ((dxypv < 0.5 && dzpv < 2.0) || mu.innerTrack()->hitPattern().pixelLayersWithMeasurement() >= 2);
+              return (ipLoose || (!doSelectClones && tightGlobal(mu)));
+          } else if (safeId(mu)) {
+              bool ipTight = (dxypv < 0.2 && dzpv < 0.5);
+              return ipTight;
+         } else {
+              return 0;
+          }
+      } else {
+          return 3; // maybe good, maybe bad, but we don't care
+      }
+ }
 
   // returns false in case the match is for a RPC chamber
   bool getMuonChamberId(DetId & id, muon_pog::MuonDetType & det, Int_t & r, Int_t & phi, Int_t & eta) const ;
@@ -232,7 +271,6 @@ void MuonPogTreeProducer::analyze (const edm::Event & ev, const edm::EventSetup 
 
   // Fill general information
   // run, luminosity block, event
-  std::cout << "hello" << ev.id().run() << std::endl;
   event_.runNumber = ev.id().run();
   event_.luminosityBlockNumber = ev.id().luminosityBlock();
   event_.eventNumber = ev.id().event();
@@ -597,6 +635,7 @@ Int_t MuonPogTreeProducer::fillMuons(const edm::Handle<edm::View<reco::Muon> > &
   edm::View<reco::Muon>::const_iterator muonIt  = muons->begin();
   edm::View<reco::Muon>::const_iterator muonEnd = muons->end();
 
+  unsigned int muonIdx_=0;
   for (; muonIt != muonEnd; ++muonIt)
     {
 
@@ -782,6 +821,11 @@ if ( mu.isMatchesValid() && ntupleMu.isTrackerArb )
       ntupleMu.isHighPt  = 0;
       ntupleMu.isLoose   = muon::isLooseMuon(mu)  ? 1 : 0;
       ntupleMu.isMedium  = muon::isMediumMuon(mu) ? 1 : 0;
+      ntupleMu.isGoodPFmuon = -1;
+      ntupleMu.isGoodPFmuonWithClones = -1;
+      ////check if the muon is a good muon
+
+
 
       if (vertexes->size() > 0)
 	{
@@ -802,6 +846,26 @@ if ( mu.isMatchesValid() && ntupleMu.isTrackerArb )
 	  ntupleMu.isSoft    = muon::isSoftMuon(mu,vertex)   ? 1 : 0;
 	  ntupleMu.isTight   = muon::isTightMuon(mu,vertex)  ? 1 : 0;
 	  ntupleMu.isHighPt  = muon::isHighPtMuon(mu,vertex) ? 1 : 0;
+    if (!mu.isPFMuon() || mu.innerTrack().isNull()) {
+      ntupleMu.isGoodPFmuon = -1;
+      ntupleMu.isGoodPFmuonWithClones = -1;
+    }
+    ntupleMu.isGoodPFmuon = checkIsGoodMuon(mu, vertex, false);
+    ntupleMu.isGoodPFmuonWithClones = checkIsGoodMuon(mu, vertex, true);
+
+    ntupleMu.isGoodPFmuonCloseBy = 0;
+    ntupleMu.isGoodPFmuonSharingSeg = 0;
+
+
+    unsigned int n1 = mu.numberOfMatches(reco::Muon::SegmentArbitration);
+    for (unsigned int j = 0; j < muons->size(); ++j) {
+        const reco::Muon &otherMu = (*muons)[j];
+        if (j == muonIdx_ || checkIsGoodMuon(otherMu, vertex, true) <= 0 || !partnerId(otherMu)) continue;
+        unsigned int n2 = mu.numberOfMatches(reco::Muon::SegmentArbitration);
+        if (deltaR2(mu,otherMu) < 0.16) ntupleMu.isGoodPFmuonCloseBy = 1;
+        if (n1 > 0 && n2 > 0 && muon::sharedSegments(mu,otherMu) >= 0.5*std::min(n1,n2)) ntupleMu.isGoodPFmuonSharingSeg = 1;
+
+    }
 
 	}
 
@@ -862,7 +926,7 @@ if ( mu.isMatchesValid() && ntupleMu.isTrackerArb )
                          ntupleMu.fitPt(muon_pog::MuonFitType::TPFMS)};
         eventId_.maxPTs.push_back(*std::max_element(PTs.begin(), PTs.end()));
       }
-
+      muonIdx_++;
     }
 
   return event_.muons.size();

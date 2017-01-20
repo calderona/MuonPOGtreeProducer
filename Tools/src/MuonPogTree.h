@@ -153,6 +153,11 @@ namespace muon_pog {
     Int_t   isRPC;
     Int_t   isStandAlone;
     Int_t   isPF;
+    Int_t   isGoodPFmuon;
+    Int_t   isGoodPFmuonWithClones;
+
+    Int_t   isGoodPFmuonCloseBy;
+    Int_t   isGoodPFmuonSharingSeg;
 
     Int_t   isSoft;
     Int_t   isLoose;
