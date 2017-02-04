@@ -13,7 +13,7 @@ def appendMuonPogNtuple(process, runOnMC, processTag="HLT", ntupleFileName="Muon
 
     if runOnMC :
         process.load("MuonPOGtreeProducer.Tools.PrunedGenParticles_cfi")
-        process.muonPogNtuple = cms.Sequence(process.prunedGenParticles + process.MuonPogTree)
+        process.muonPogNtuple = cms.Sequence(process.MuonPogTree)
     else :
         process.muonPogNtuple = cms.Sequence(process.MuonPogTree)
         process.MuonPogTree.PileUpInfoTag = cms.untracked.InputTag("none")
@@ -29,7 +29,7 @@ def appendMuonPogNtuple(process, runOnMC, processTag="HLT", ntupleFileName="Muon
         process.AOutput.replace(process.reconstruction_step, process.reconstruction_step + process.goodOfflinePrimaryVertices)
     else :
         print "[MuonPogNtuples]: Creating FastFilter path to host goodOfflinePrimaryVertices"
-        process.FastFilters = cms.Path(process.goodOfflinePrimaryVertices)
+        #process.FastFilters = cms.Path(process.goodOfflinePrimaryVertices)
     
     if hasattr(process,"AOutput") :
         print "[MuonPogNtuples]: EndPath AOutput found, appending ntuples"
