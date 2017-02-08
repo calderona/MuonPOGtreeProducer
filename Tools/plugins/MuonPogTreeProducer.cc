@@ -35,6 +35,7 @@
 #include "DataFormats/METReco/interface/CaloMETFwd.h"
 #include "DataFormats/METReco/interface/PFMET.h"
 #include "DataFormats/METReco/interface/PFMETFwd.h"
+#include "DataFormats/PatCandidates/interface/MET.h"
 
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
@@ -78,7 +79,7 @@ private:
   void fillGenParticles(const edm::Handle<reco::GenParticleCollection> &);
 
   void fillHlt(const edm::Handle<edm::TriggerResults> &,
-	       const edm::Handle<trigger::TriggerEvent> &,
+	     
 	       const edm::TriggerNames &);
 
   void fillPV(const edm::Handle<std::vector<reco::Vertex> > &);
@@ -144,7 +145,7 @@ private:
   edm::EDGetTokenT<std::vector<reco::Vertex> > primaryVertexToken_;
   edm::EDGetTokenT<reco::BeamSpot> beamSpotToken_;
 
-  edm::EDGetTokenT<reco::PFMETCollection> pfMetToken_;
+  edm::EDGetTokenT<std::vector<pat::MET> > pfMetToken_;
   edm::EDGetTokenT<reco::PFMETCollection> pfChMetToken_;
   edm::EDGetTokenT<reco::CaloMETCollection> caloMetToken_;
 
@@ -189,7 +190,7 @@ MuonPogTreeProducer::MuonPogTreeProducer( const edm::ParameterSet & cfg )
   if (tag.label() != "none") beamSpotToken_ = consumes<reco::BeamSpot>(tag);
 
   tag = cfg.getUntrackedParameter<edm::InputTag>("PFMetTag", edm::InputTag("pfMet"));
-  if (tag.label() != "none") pfMetToken_ = consumes<reco::PFMETCollection>(tag);
+  if (tag.label() != "none") pfMetToken_ = consumes<std::vector<pat::MET> >(tag);
 
   tag = cfg.getUntrackedParameter<edm::InputTag>("PFChMetTag", edm::InputTag("pfChMet"));
   if (tag.label() != "none") pfChMetToken_ = consumes<reco::PFMETCollection>(tag);
@@ -328,16 +329,14 @@ void MuonPogTreeProducer::analyze (const edm::Event & ev, const edm::EventSetup 
     }
 
   // Fill trigger information
-  if (!trigResultsToken_.isUninitialized() &&
-      !trigSummaryToken_.isUninitialized())
+  if (!trigResultsToken_.isUninitialized() ) // && !trigSummaryToken_.isUninitialized())
     {
 
       edm::Handle<edm::TriggerResults> triggerResults;
-      edm::Handle<trigger::TriggerEvent> triggerEvent;
+      //edm::Handle<trigger::TriggerEvent> triggerEvent;
 
-      if (ev.getByToken(trigResultsToken_, triggerResults) &&
-	  ev.getByToken(trigSummaryToken_, triggerEvent))
-	fillHlt(triggerResults, triggerEvent,ev.triggerNames(*triggerResults));
+      if (ev.getByToken(trigResultsToken_, triggerResults) ) // && ev.getByToken(trigSummaryToken_, triggerEvent))
+	fillHlt(triggerResults, ev.triggerNames(*triggerResults));
       else
 	edm::LogError("") << "[MuonPogTreeProducer]: Trigger collections do not exist !!!";
     }
@@ -363,17 +362,18 @@ void MuonPogTreeProducer::analyze (const edm::Event & ev, const edm::EventSetup 
     }
 
   // Fill (raw) MET information: PF, PF charged, Calo
-  edm::Handle<reco::PFMETCollection> pfMet;
+  edm::Handle<std::vector<pat::MET> > pfMet;
   if(!pfMetToken_.isUninitialized())
     {
       if (!ev.getByToken(pfMetToken_, pfMet))
-	edm::LogError("") << "[MuonPogTreeProducer] PFMet collection does not exist !!!";
+      	edm::LogError("") << "[MuonPogTreeProducer] PFMet collection does not exist !!!";
       else {
-	const reco::PFMET &iPfMet = (*pfMet)[0];
-	event_.mets.pfMet = iPfMet.et();
-  event_.mets.pfMetPx = iPfMet.px();
-  event_.mets.pfMetPy = iPfMet.py();
-      }
+	const pat::MET & iPfMet = pfMet->front();     
+	//const reco::PFMET &iPfMet = (*pfMet)[0];
+	event_.mets.pfMet = iPfMet.pt();
+	event_.mets.pfMetPx = iPfMet.px();
+	event_.mets.pfMetPy = iPfMet.py();
+	}
     }
 
   edm::Handle<reco::PFMETCollection> pfChMet;
@@ -510,9 +510,9 @@ void MuonPogTreeProducer::fillGenParticles(const edm::Handle<reco::GenParticleCo
 
 
 void MuonPogTreeProducer::fillHlt(const edm::Handle<edm::TriggerResults> & triggerResults,
-				  const edm::Handle<trigger::TriggerEvent> & triggerEvent,
-				  const edm::TriggerNames & triggerNames)
+			     				  const edm::TriggerNames & triggerNames)
 {
+
 
   for (unsigned int iTrig=0; iTrig<triggerNames.size(); ++iTrig)
     {
@@ -525,7 +525,7 @@ void MuonPogTreeProducer::fillHlt(const edm::Handle<edm::TriggerResults> & trigg
 	}
     }
 
-  const trigger::size_type nFilters(triggerEvent->sizeFilters());
+  /*   const trigger::size_type nFilters(triggerEvent->sizeFilters());
 
   for (trigger::size_type iFilter=0; iFilter!=nFilters; ++iFilter)
     {
@@ -559,7 +559,7 @@ void MuonPogTreeProducer::fillHlt(const edm::Handle<edm::TriggerResults> & trigg
 
 	    }
 	}
-    }
+	}*/
 
 }
 

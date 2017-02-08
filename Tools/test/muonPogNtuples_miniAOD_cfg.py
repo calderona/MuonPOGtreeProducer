@@ -1,3 +1,4 @@
+
 import FWCore.ParameterSet.Config as cms
 import FWCore.ParameterSet.VarParsing as VarParsing
 
@@ -8,25 +9,25 @@ import sys
 options = VarParsing.VarParsing()
 
 options.register('globalTag',
-                 '80X_mcRun2_asymptotic_2016_v3', #default value
+                 '80X_dataRun2_Prompt_v16', #default value
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.string,
                  "Global Tag")
 
 options.register('nEvents',
-                 -1, #default value
+                 1000, #default value
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.int,
                  "Maximum number of processed events")
 
 options.register('eosInputFolder',
-                 '/store/relval/CMSSW_8_0_3/RelValZMM_13/MINIAODSIM/PU25ns_80X_mcRun2_asymptotic_2016_v3_gs71xNewGtHcalCust-v1/00000', #default value
+                 '/tmp/calderon/eos/cms/store/data/Run2016H/SingleMuon/MINIAOD/03Feb2017_ver3-v1/80000/', #default value
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.string,
                  "EOS folder with input files")
 
 options.register('ntupleName',
-                 './muonPOGNtuple_miniAOD_8_0_3_RelValZMM_13.root', #default value
+                 '88639E52-7DEA-E611-9102-A0369F310374.root', #default value
                  VarParsing.VarParsing.multiplicity.singleton,
                  VarParsing.VarParsing.varType.string,
                  "Folder and name ame for output ntuple")
@@ -105,9 +106,9 @@ customiseMuonCuts(process,options.minMuPt,options.minNMu)
 
 process.MuonPogTree.MuonTag = cms.untracked.InputTag("slimmedMuons")
 process.MuonPogTree.PrimaryVertexTag = cms.untracked.InputTag("offlineSlimmedPrimaryVertices")
-process.MuonPogTree.TrigResultsTag = cms.untracked.InputTag("none")
+process.MuonPogTree.TrigResultsTag = cms.untracked.InputTag("TriggerResults")
 process.MuonPogTree.TrigSummaryTag = cms.untracked.InputTag("none")
 process.MuonPogTree.PFMetTag = cms.untracked.InputTag("slimmedMETs")
 process.MuonPogTree.PFChMetTag = cms.untracked.InputTag("none")
 process.MuonPogTree.CaloMetTag = cms.untracked.InputTag("none")
-process.MuonPogTree.PrimaryVertexTag =  cms.untracked.InputTag("offlineSlimmedPrimaryVertices")
+
