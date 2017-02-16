@@ -1,0 +1,74 @@
+#define AnalysisTTbar_cxx
+#include "AnalysisTTbar.h"
+#include "MuonPogTree.h"
+
+
+//==============================================================================
+//
+// Data members
+//
+//==============================================================================
+
+float               luminosity;
+Float_t             event_weight;
+
+TFile*              root_output;
+TString             filename;
+
+
+//------------------------------------------------------------------------------
+// Loop
+//------------------------------------------------------------------------------
+void AnalysisSignalMuonTree::Loop(TString sample)
+{
+
+  TH1::SetDefaultSumw2();
+
+  luminosity = 1.0;  // fb-1 luminosity to be used 
+  filename   = sample;
+
+  gSystem->mkdir("rootfiles", kTRUE);
+  //gSystem->mkdir("txt",       kTRUE);
+
+  root_output = new TFile("rootfiles/" + filename + ".root", "recreate");
+
+ 
+  // Add new branches to the root file. 
+  //----------------------------------------------------------------------------
+
+  TTree *mytreeEvent_ = new TTree("eventTree","");
+
+  int nbOfMuons, nbOfPFmuons, nbOfMuonsLowDR, nbOfPFmuonsLowDR;
+  mytreeEvent_->Branch("nbOfMuons", &nbOfMuons,"nbOfMuons/I");
+  mytreeEvent_->Branch("nbOfPFmuons", &nbOfPFmuons,"nbOfPFmuons/I");
+  mytreeEvent_->Branch("nbOfMuonsLowDR", &nbOfMuonsLowDR,"nbOfMuonsLowDR/I");
+  mytreeEvent_->Branch("nbOfPFmuonsLowDR", &nbOfPFmuonsLowDR,"nbOfPFmuonsLowDR/I");
+
+
+  muon_pog::Muon aProbeMuon;
+  TTree *mytree_ = new TTree("probeMuons","");
+  mytree_->Branch("aProbeMuon", &aProbeMuon, 64000 ,2);
+  muon_pog::Muon aBadMuon;
+  TTree *mytreeBad_ = new TTree("badMuons","");
+  mytreeBad_->Branch("aBadMuon", &aBadMuon, 64000 ,2);
+  muon_pog::Muon aBadMuonLowMass;
+  TTree *mytreeBadLowMass_ = new TTree("badMuonsLowMass","");
+  mytreeBadLowMass_->Branch("aBadMuonLowMass", &aBadMuonLowMass, 64000 ,2);
+
+
+  // Loop over events
+  //----------------------------------------------------------------------------
+
+if (fChain == 0) return;
+
+  Long64_t nentries = fChain->GetEntries();
+
+  for (Long64_t jentry=0; jentry<nentries;jentry++) {
+    
+    Long64_t ientry = LoadTree(jentry);
+    
+    if (ientry < 0) break;
+    
+    fChain->GetEntry(jentry);
+
+

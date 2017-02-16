@@ -1,0 +1,27 @@
+#include "TCanvas.h"
+#include "TFile.h"
+#include "THStack.h"
+#include "TH1F.h"
+#include "TLatex.h"
+#include "TSystem.h"
+#include "TTree.h"
+
+
+const UInt_t nProcesses = 2;
+
+enum {iA, iB};
+
+
+TFile* input[nProcesses];
+
+TString process[nProcesses];
+
+process[iA]  = "23SepMiniAOD";
+process[iB]  = "03FebMiniAOD";
+
+
+Color_t color[nProcesses];
+
+color[iA]  = kRed+1;
+color[iB]  = kAzure-5;
+

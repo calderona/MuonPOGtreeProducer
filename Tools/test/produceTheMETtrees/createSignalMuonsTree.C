@@ -109,7 +109,7 @@ void createSignalMuonsTree(TString inputFileName){
      evBranch->GetEntry(i);
      if (i%10000==0) cout << "Event=" << i  << endl;
 
-    std::vector<muon_pog::HLTObject> HLTobjectsSkimed = skimHLTobject(ev->hlt.objects, theFilterName);
+    //std::vector<muon_pog::HLTObject> HLTobjectsSkimed = skimHLTobject(ev->hlt.objects, theFilterName);
 
      //cout << "nomber of good filters=" << HLTobjectsSkimed.size() << endl;
      ////// now, try to find a tag muon_pog
@@ -134,7 +134,7 @@ void createSignalMuonsTree(TString inputFileName){
        muon_pog::Muon tagMuons = allGoodMuons.at(m);
        if (!(tagMuons.isTight==1)) continue;
        if (!(tagMuons.isoPflow04<0.15)) continue;
-       if (!(isMatchedWithTrigger(tagMuons, HLTobjectsSkimed))) continue;
+       //if (!(isMatchedWithTrigger(tagMuons, HLTobjectsSkimed))) continue;
        //cout << "is matched=" << isMatchedWithTrigger(tagMuons, HLTobjectsSkimed) << endl;
        for (int n = 0 ; n < allGoodMuons.size() ; n++){
          if (m==n) continue;
