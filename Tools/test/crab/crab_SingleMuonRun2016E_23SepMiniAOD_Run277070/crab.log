@@ -1,0 +1,491 @@
+# Conditions read from  CMS_CONDITIONS  via FrontierProd 
+[MuonPogNtuples]: Creating FastFilter path to host goodOfflinePrimaryVertices
+[MuonPogNtuples]: EndPath AOuptput not found, creating it for ntuple sequence
+[MuonPogNtuples]: skimming HLT format using:
+	paths : all
+	filters : all
+[MuonPogNtuples]: skimming ntuple saving only muons that are: # STA || TRK || GLB muons >= 2 with muon pT > 10.0
+DEBUG 2017-02-14 17:16:49,429: 	 Executing command: 'submit'
+DEBUG 2017-02-14 17:16:49,430: 	 Found CRAB cache file /afs/cern.ch/user/c/calderon/.crab3
+DEBUG 2017-02-14 17:16:49,437: 	 Checking credentials
+DEBUG 2017-02-14 17:16:49,438: 	 Found proxy file /tmp/x509up_u15250
+DEBUG 2017-02-14 17:16:49,438: 	 Getting proxy life time left
+DEBUG 2017-02-14 17:16:50,043: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u15250 -timeleft
+ output : 86205
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:16:50,552: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u15250 -actimeleft
+ output : 86204
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:16:50,552: 	 Proxy valid for 23:56:45 hours
+INFO 2017-02-14 17:16:50,552: 	 Will use CRAB configuration file crab_SingleMuon_Run2016E-23SepMiniAOD_Run277070.py
+DEBUG 2017-02-14 17:16:50,553: 	 Loading CRAB configuration file.
+DEBUG 2017-02-14 17:16:50,554: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+DEBUG 2017-02-14 17:16:50,677: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=calderon/CN=602442/CN=Alicia Calderon Tazon
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:16:50,678: 	 Checking credentials
+DEBUG 2017-02-14 17:16:50,678: 	 Found proxy file /tmp/x509up_u15250
+DEBUG 2017-02-14 17:16:50,678: 	 Getting proxy life time left
+DEBUG 2017-02-14 17:16:51,290: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u15250 -timeleft
+ output : 86203
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:16:51,895: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u15250 -actimeleft
+ output : 86203
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:16:51,896: 	 Proxy valid for 23:56:43 hours
+DEBUG 2017-02-14 17:16:52,502: 	 Executing : 
+ command : env X509_USER_PROXY=/tmp/x509up_u15250 voms-proxy-info -fqan
+ output : /cms/Role=NULL/Capability=NULL
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:16:52,927: 	 Registering user credentials for server /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0118a|0119|0108|0105).cern.ch
+DEBUG 2017-02-14 17:16:53,036: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=calderon/CN=602442/CN=Alicia Calderon Tazon
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:16:53,037: 	 Getting myproxy life time left for myproxy.cern.ch
+DEBUG 2017-02-14 17:16:53,037: 	 Calculating hash of /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=calderon/CN=602442/CN=Alicia Calderon Tazon_cmsweb.cern.ch for credential name
+DEBUG 2017-02-14 17:16:53,241: 	 Executing : 
+ command : myproxy-info -l 05162609e2b2f4bf9da215d9d271987f01b8af73 -s myproxy.cern.ch
+ output : username: 05162609e2b2f4bf9da215d9d271987f01b8af73
+owner: /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=calderon/CN=602442/CN=Alicia Calderon Tazon
+  renewal policy: /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0118a|0119|0108|0105).cern.ch
+  trusted retrieval policy: /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0118a|0119|0108|0105).cern.ch
+  timeleft: 592:41:58  (24.7 days)
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:16:53,243: 	 Myproxy is valid: 2133718
+DEBUG 2017-02-14 17:16:53,243: 	 Command use: submit
+DEBUG 2017-02-14 17:16:53,243: 	 Options use: ['-c', 'crab_SingleMuon_Run2016E-23SepMiniAOD_Run277070.py']
+DEBUG 2017-02-14 17:16:53,667: 	 CRABClient version: 3.3.1702
+DEBUG 2017-02-14 17:16:53,667: 	 Instance is prod
+DEBUG 2017-02-14 17:16:53,667: 	 Server base url is cmsweb.cern.ch
+DEBUG 2017-02-14 17:16:53,667: 	 Command url /crabserver/prod/workflow
+DEBUG 2017-02-14 17:16:53,667: 	 Started submission
+DEBUG 2017-02-14 17:16:53,667: 	 Working on /afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26/src/MuonPOGtreeProducer/Tools/test/crab/crab_SingleMuonRun2016E_23SepMiniAOD_Run277070
+DEBUG 2017-02-14 17:16:54,138: 	 Loading required information from the environment
+DEBUG 2017-02-14 17:16:54,139: 	 Found CMSSW_8_0_26 for slc6_amd64_gcc530 with base /afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26
+DEBUG 2017-02-14 17:16:54,139: 	 Loading required information from the environment
+DEBUG 2017-02-14 17:16:54,139: 	 Found CMSSW_8_0_26 for slc6_amd64_gcc530 with base /afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26
+DEBUG 2017-02-14 17:16:54,153: 	 UNIQUE NAME: tarUUID 40e21b18-f071-45c1-96cb-a3ec5732c49f 
+DEBUG 2017-02-14 17:16:54,153: 	 self.config: from WMCore.Configuration import Configuration
+config = Configuration()
+config.section_('General')
+config.General.transferOutputs = True
+config.General.requestName = 'SingleMuonRun2016E_23SepMiniAOD_Run277070'
+config.section_('JobType')
+config.JobType.psetName = '../muonPogNtuples_miniAOD_cfg.py'
+config.JobType.pluginName = 'Analysis'
+config.JobType.pyCfgParams = ['globalTag=80X_dataRun2_2016SeptRepro_v3', 'ntupleName=muonPOGNtuple_SingleMuonRun2016E_23SepMiniAOD.root', 'nEvents=-1', 'runOnMC=False', 'hltPathFilter=all', 'minMuPt=10.0', 'minNMu=2']
+config.JobType.allowUndistributedCMSSW = True
+config.section_('Data')
+config.Data.inputDataset = '/SingleMuon/Run2016E-23Sep2016-v1/MINIAOD'
+config.Data.unitsPerJob = 150
+config.Data.splitting = 'LumiBased'
+config.Data.inputDBS = 'https://cmsweb.cern.ch/dbs/prod/global/DBSReader/'
+config.Data.outLFNDirBase = '/store/group/phys_muon/calderon/NTuplesMuonPOG/'
+config.Data.runRange = '277070'
+config.section_('Site')
+config.Site.storageSite = 'T2_CH_CERN'
+
+DEBUG 2017-02-14 17:16:54,153: 	 self.config.JobType.psetName: ../muonPogNtuples_miniAOD_cfg.py
+INFO 2017-02-14 17:16:54,154: 	 Importing CMSSW configuration ../muonPogNtuples_miniAOD_cfg.py
+DEBUG 2017-02-14 17:16:54,154: 	 Additional parameters for the CMSSW configuration are: ['globalTag=80X_dataRun2_2016SeptRepro_v3', 'ntupleName=muonPOGNtuple_SingleMuonRun2016E_23SepMiniAOD.root', 'nEvents=-1', 'runOnMC=False', 'hltPathFilter=all', 'minMuPt=10.0', 'minNMu=2']
+INFO 2017-02-14 17:16:54,642: 	 Finished importing CMSSW configuration ../muonPogNtuples_miniAOD_cfg.py
+DEBUG 2017-02-14 17:16:54,643: 	 Writing CMSSW configuration to /afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26/src/MuonPOGtreeProducer/Tools/test/crab/crab_SingleMuonRun2016E_23SepMiniAOD_Run277070/inputs/PSet.py
+DEBUG 2017-02-14 17:16:54,693: 	 The following EDM output files will be collected: []
+DEBUG 2017-02-14 17:16:54,694: 	 The following TFile output files will be collected: ['muonPOGNtuple_SingleMuonRun2016E_23SepMiniAOD.root']
+DEBUG 2017-02-14 17:16:54,694: 	 The following user output files will be collected: []
+DEBUG 2017-02-14 17:16:54,694: 	 Loading required information from the environment
+DEBUG 2017-02-14 17:16:54,694: 	 Found CMSSW_8_0_26 for slc6_amd64_gcc530 with base /afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26
+DEBUG 2017-02-14 17:16:54,694: 	 Making tarball in /afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26/src/MuonPOGtreeProducer/Tools/test/crab/crab_SingleMuonRun2016E_23SepMiniAOD_Run277070/inputs/40e21b18-f071-45c1-96cb-a3ec5732c49fdefault.tgz
+DEBUG 2017-02-14 17:16:54,742: 	 Checking directory /afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26/lib
+DEBUG 2017-02-14 17:16:54,742: 	 Adding directory /afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26/lib to tarball
+DEBUG 2017-02-14 17:16:54,897: 	 Checking directory /afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26/biglib
+DEBUG 2017-02-14 17:16:54,897: 	 Adding directory /afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26/biglib to tarball
+DEBUG 2017-02-14 17:16:54,898: 	 Checking directory /afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26/module
+DEBUG 2017-02-14 17:16:54,945: 	 Uploading archive /afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26/src/MuonPOGtreeProducer/Tools/test/crab/crab_SingleMuonRun2016E_23SepMiniAOD_Run277070/inputs/40e21b18-f071-45c1-96cb-a3ec5732c49fdefault.tgz to the CRAB cache. Using URI https://cmsweb.cern.ch/crabcache
+DEBUG 2017-02-14 17:16:55,429: 	 Loading required information from the environment
+DEBUG 2017-02-14 17:16:55,429: 	 Found CMSSW_8_0_26 for slc6_amd64_gcc530 with base /afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26
+DEBUG 2017-02-14 17:16:55,429: 	 Making tarball in /afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26/src/MuonPOGtreeProducer/Tools/test/crab/crab_SingleMuonRun2016E_23SepMiniAOD_Run277070/inputs/debugFiles.tgz
+DEBUG 2017-02-14 17:16:55,433: 	 Uploading archive /afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26/src/MuonPOGtreeProducer/Tools/test/crab/crab_SingleMuonRun2016E_23SepMiniAOD_Run277070/inputs/debugFiles.tgz to the CRAB cache. Using URI https://cmsweb.cern.ch/crabcache
+DEBUG 2017-02-14 17:16:55,882: 	 Result uploading input files: 0b5fee1b0198b00f2c814dfddc205f4d908d78e0c6cabc1eef7c004041d8f346.tar.gz 
+WARNING 2017-02-14 17:16:55,884: 	 Warning: The following output files will not be published, as they are not EDM files: ['muonPOGNtuple_SingleMuonRun2016E_23SepMiniAOD.root']
+INFO 2017-02-14 17:16:55,884: 	 Sending the request to the server
+DEBUG 2017-02-14 17:16:55,885: 	 Submitting {'maxjobruntime': 1250, 'extrajdl': [], 'ignorelocality': 0, 'savelogsflag': 0, 'useparent': 0, 'asyncdest': 'T2_CH_CERN', 'algoargs': 150, 'cachefilename': '0b5fee1b0198b00f2c814dfddc205f4d908d78e0c6cabc1eef7c004041d8f346.tar.gz', 'numcores': 1, 'addoutputfiles': [], 'generator': 'pythia', 'maxmemory': 2000, 'publishdbsurl': 'https://cmsweb.cern.ch/dbs/prod/phys03/DBSWriter', 'priority': 10, 'jobsw': 'CMSSW_8_0_26', 'edmoutfiles': [], 'userfiles': [], 'primarydataset': '', 'inputdata': '/SingleMuon/Run2016E-23Sep2016-v1/MINIAOD', 'lfn': '/store/group/phys_muon/calderon/NTuplesMuonPOG/', 'dryrun': 0, 'workflow': 'crab_SingleMuonRun2016E_23SepMiniAOD_Run277070', 'adduserfiles': [], 'jobarch': 'slc6_amd64_gcc530', 'lumis': ['1,268435455'], 'nonprodsw': 1, 'tfileoutfiles': ['muonPOGNtuple_SingleMuonRun2016E_23SepMiniAOD.root'], 'oneEventMode': 0, 'debugfilename': '7f500dba98b97d5897f7ebe101fc115c68a1ab89c01129f4c4f41fd3f81137ee.tar.gz', 'cacheurl': u'https://cmsweb.cern.ch/crabcache', 'saveoutput': 1, 'publication': 1, 'runs': ['277070'], 'totalunits': 0, 'splitalgo': 'LumiBased', 'ignoreglobalblacklist': 0, 'nonvaliddata': 0, 'dbsurl': 'https://cmsweb.cern.ch/dbs/prod/global/DBSReader', 'publishgroupname': 0, 'jobtype': 'Analysis', 'publishname2': ''} 
+DEBUG 2017-02-14 17:16:55,885: 	 Encoded submit request: maxjobruntime=1250&ignorelocality=0&savelogsflag=0&useparent=0&asyncdest=T2_CH_CERN&algoargs=150&cachefilename=0b5fee1b0198b00f2c814dfddc205f4d908d78e0c6cabc1eef7c004041d8f346.tar.gz&numcores=1&generator=pythia&maxmemory=2000&publishdbsurl=https%3A%2F%2Fcmsweb.cern.ch%2Fdbs%2Fprod%2Fphys03%2FDBSWriter&priority=10&jobsw=CMSSW_8_0_26&primarydataset=&inputdata=%2FSingleMuon%2FRun2016E-23Sep2016-v1%2FMINIAOD&lfn=%2Fstore%2Fgroup%2Fphys_muon%2Fcalderon%2FNTuplesMuonPOG%2F&dryrun=0&workflow=crab_SingleMuonRun2016E_23SepMiniAOD_Run277070&jobarch=slc6_amd64_gcc530&nonprodsw=1&oneEventMode=0&debugfilename=7f500dba98b97d5897f7ebe101fc115c68a1ab89c01129f4c4f41fd3f81137ee.tar.gz&cacheurl=https%3A%2F%2Fcmsweb.cern.ch%2Fcrabcache&saveoutput=1&publication=1&totalunits=0&splitalgo=LumiBased&ignoreglobalblacklist=0&nonvaliddata=0&dbsurl=https%3A%2F%2Fcmsweb.cern.ch%2Fdbs%2Fprod%2Fglobal%2FDBSReader&publishgroupname=0&jobtype=Analysis&publishname2=&tfileoutfiles=muonPOGNtuple_SingleMuonRun2016E_23SepMiniAOD.root&runs=277070&lumis=1%2C268435455
+DEBUG 2017-02-14 17:16:56,340: 	 Result: {u'result': [{u'RequestName': u'170214_161656:calderon_crab_SingleMuonRun2016E_23SepMiniAOD_Run277070'}]}
+INFO 2017-02-14 17:16:56,342: 	 Success: Your task has been delivered to the CRAB3 server.
+INFO 2017-02-14 17:16:56,343: 	 Task name: 170214_161656:calderon_crab_SingleMuonRun2016E_23SepMiniAOD_Run277070
+INFO 2017-02-14 17:16:56,343: 	 Please use 'crab status' to check how the submission process proceeds.
+DEBUG 2017-02-14 17:16:56,343: 	 About to return
+INFO 2017-02-14 17:16:56,346: 	 Log file is /afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26/src/MuonPOGtreeProducer/Tools/test/crab/crab_SingleMuonRun2016E_23SepMiniAOD_Run277070/crab.log
+DEBUG 2017-02-14 17:22:10,559: 	 Executing command: 'status'
+DEBUG 2017-02-14 17:22:10,559: 	 Found CRAB cache file /afs/cern.ch/user/c/calderon/.crab3
+DEBUG 2017-02-14 17:22:10,566: 	 Checking credentials
+DEBUG 2017-02-14 17:22:10,567: 	 Found proxy file /tmp/x509up_u15250
+DEBUG 2017-02-14 17:22:10,567: 	 Getting proxy life time left
+DEBUG 2017-02-14 17:22:11,273: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u15250 -timeleft
+ output : 85883
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:22:11,883: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u15250 -actimeleft
+ output : 85883
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:22:11,883: 	 Proxy valid for 23:51:23 hours
+DEBUG 2017-02-14 17:22:12,000: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=calderon/CN=602442/CN=Alicia Calderon Tazon
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:22:12,000: 	 Checking credentials
+DEBUG 2017-02-14 17:22:12,000: 	 Found proxy file /tmp/x509up_u15250
+DEBUG 2017-02-14 17:22:12,000: 	 Getting proxy life time left
+DEBUG 2017-02-14 17:22:12,612: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u15250 -timeleft
+ output : 85882
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:22:13,324: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u15250 -actimeleft
+ output : 85881
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:22:13,325: 	 Proxy valid for 23:51:22 hours
+DEBUG 2017-02-14 17:22:13,786: 	 Registering user credentials for server /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0118a|0119|0108|0105).cern.ch
+DEBUG 2017-02-14 17:22:13,902: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=calderon/CN=602442/CN=Alicia Calderon Tazon
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:22:13,903: 	 Getting myproxy life time left for myproxy.cern.ch
+DEBUG 2017-02-14 17:22:13,903: 	 Calculating hash of /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=calderon/CN=602442/CN=Alicia Calderon Tazon_cmsweb.cern.ch for credential name
+DEBUG 2017-02-14 17:22:14,109: 	 Executing : 
+ command : myproxy-info -l 05162609e2b2f4bf9da215d9d271987f01b8af73 -s myproxy.cern.ch
+ output : username: 05162609e2b2f4bf9da215d9d271987f01b8af73
+owner: /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=calderon/CN=602442/CN=Alicia Calderon Tazon
+  renewal policy: /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0118a|0119|0108|0105).cern.ch
+  trusted retrieval policy: /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0118a|0119|0108|0105).cern.ch
+  timeleft: 592:36:37  (24.7 days)
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:22:14,110: 	 Myproxy is valid: 2133397
+DEBUG 2017-02-14 17:22:14,110: 	 Command use: status
+DEBUG 2017-02-14 17:22:14,110: 	 Options use: ['crab_SingleMuonRun2016E_23SepMiniAOD_Run277070']
+DEBUG 2017-02-14 17:22:14,593: 	 CRABClient version: 3.3.1702
+DEBUG 2017-02-14 17:22:14,593: 	 Instance is prod
+DEBUG 2017-02-14 17:22:14,593: 	 Server base url is cmsweb.cern.ch
+DEBUG 2017-02-14 17:22:14,593: 	 Command url /crabserver/prod/workflow
+DEBUG 2017-02-14 17:22:14,593: 	 Looking up detailed status of task 170214_161656:calderon_crab_SingleMuonRun2016E_23SepMiniAOD_Run277070
+DEBUG 2017-02-14 17:22:31,880: 	 {u'status': u'UNKNOWN', u'username': u'calderon', u'totalJobdefs': 0, u'jobsPerStatus': {}, u'taskWarningMsg': [], u'schedd': u'crab3@vocms0194.cern.ch', u'statusFailureMsg': u'Node status file not currently available. Retry in a minute if you just submitted the task.', u'taskFailureMsg': u'', u'failedJobdefs': 0, u'command': u'SUBMIT', u'submissionTime': 1487089016, u'jobdefErrors': [], u'collector': u'cmsgwms-collector-global.cern.ch,cmssrv221.fnal.gov', u'jobList': []}
+INFO 2017-02-14 17:22:31,880: 	 CRAB project directory:		/afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26/src/MuonPOGtreeProducer/Tools/test/crab/crab_SingleMuonRun2016E_23SepMiniAOD_Run277070
+INFO 2017-02-14 17:22:31,881: 	 Task name:			170214_161656:calderon_crab_SingleMuonRun2016E_23SepMiniAOD_Run277070
+INFO 2017-02-14 17:22:31,881: 	 Grid scheduler:			crab3@vocms0194.cern.ch
+INFO 2017-02-14 17:22:31,881: 	 Task status:			UNKNOWN
+INFO 2017-02-14 17:22:31,881: 	 Task URL to use for HELP:	https://cmsweb.cern.ch/crabserver/ui/task/170214_161656%3Acalderon_crab_SingleMuonRun2016E_23SepMiniAOD_Run277070
+INFO 2017-02-14 17:22:31,881: 	 Dashboard monitoring URL:	http://dashb-cms-job.cern.ch/dashboard/templates/task-analysis/#user=calderon&table=Mains&pattern=170214_161656%3Acalderon_crab_SingleMuonRun2016E_23SepMiniAOD_Run277070
+ERROR 2017-02-14 17:22:31,881: 	 Error retrieving task status:	Node status file not currently available. Retry in a minute if you just submitted the task.
+INFO 2017-02-14 17:22:31,885: 	 Log file is /afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26/src/MuonPOGtreeProducer/Tools/test/crab/crab_SingleMuonRun2016E_23SepMiniAOD_Run277070/crab.log
+DEBUG 2017-02-14 17:23:12,606: 	 Executing command: 'status'
+DEBUG 2017-02-14 17:23:12,607: 	 Found CRAB cache file /afs/cern.ch/user/c/calderon/.crab3
+DEBUG 2017-02-14 17:23:12,615: 	 Checking credentials
+DEBUG 2017-02-14 17:23:12,617: 	 Found proxy file /tmp/x509up_u15250
+DEBUG 2017-02-14 17:23:12,617: 	 Getting proxy life time left
+DEBUG 2017-02-14 17:23:13,326: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u15250 -timeleft
+ output : 85821
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:23:13,832: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u15250 -actimeleft
+ output : 85821
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:23:13,833: 	 Proxy valid for 23:50:21 hours
+DEBUG 2017-02-14 17:23:13,955: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=calderon/CN=602442/CN=Alicia Calderon Tazon
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:23:13,956: 	 Checking credentials
+DEBUG 2017-02-14 17:23:13,956: 	 Found proxy file /tmp/x509up_u15250
+DEBUG 2017-02-14 17:23:13,956: 	 Getting proxy life time left
+DEBUG 2017-02-14 17:23:14,567: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u15250 -timeleft
+ output : 85820
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:23:15,175: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u15250 -actimeleft
+ output : 85819
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:23:15,176: 	 Proxy valid for 23:50:20 hours
+DEBUG 2017-02-14 17:23:15,557: 	 Registering user credentials for server /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0118a|0119|0108|0105).cern.ch
+DEBUG 2017-02-14 17:23:15,665: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=calderon/CN=602442/CN=Alicia Calderon Tazon
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:23:15,666: 	 Getting myproxy life time left for myproxy.cern.ch
+DEBUG 2017-02-14 17:23:15,666: 	 Calculating hash of /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=calderon/CN=602442/CN=Alicia Calderon Tazon_cmsweb.cern.ch for credential name
+DEBUG 2017-02-14 17:23:15,970: 	 Executing : 
+ command : myproxy-info -l 05162609e2b2f4bf9da215d9d271987f01b8af73 -s myproxy.cern.ch
+ output : username: 05162609e2b2f4bf9da215d9d271987f01b8af73
+owner: /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=calderon/CN=602442/CN=Alicia Calderon Tazon
+  renewal policy: /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0118a|0119|0108|0105).cern.ch
+  trusted retrieval policy: /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0118a|0119|0108|0105).cern.ch
+  timeleft: 592:35:36  (24.7 days)
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:23:15,972: 	 Myproxy is valid: 2133336
+DEBUG 2017-02-14 17:23:15,972: 	 Command use: status
+DEBUG 2017-02-14 17:23:15,972: 	 Options use: ['crab_SingleMuonRun2016E_23SepMiniAOD_Run277070']
+DEBUG 2017-02-14 17:23:16,313: 	 CRABClient version: 3.3.1702
+DEBUG 2017-02-14 17:23:16,314: 	 Instance is prod
+DEBUG 2017-02-14 17:23:16,314: 	 Server base url is cmsweb.cern.ch
+DEBUG 2017-02-14 17:23:16,314: 	 Command url /crabserver/prod/workflow
+DEBUG 2017-02-14 17:23:16,314: 	 Looking up detailed status of task 170214_161656:calderon_crab_SingleMuonRun2016E_23SepMiniAOD_Run277070
+INFO 2017-02-14 17:23:16,626: 	 The server answered with an error.
+INFO 2017-02-14 17:23:16,627: 	 It seems the CMSWEB frontend is not responding. Please check: https://twiki.cern.ch/twiki/bin/viewauth/CMS/ScheduledInterventions
+DEBUG 2017-02-14 17:23:16,627: 	 ERROR: Service Unavailable (503):  '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+ <head>
+ <title>CMSWEB Error: Service unavailable</title>
+ <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+ <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+ <link rel="stylesheet" type="text/css" media="screen" href="/css/cmsweb.css" />
+</head>
+<body>
+ <div id="main">
+  <div id="top">
+   <div class="boxTitle"><img src="/img/title.gif" alt="CMSWEB (title)" /></div>
+  </div>
+  <div id="middle">
+   <div class="boxLinkContainer">
+    <h2>Service unavailable</h2>
+    <p>The site you requested is not available.</p><p>CMS <a href='https://twiki.cern.ch/twiki/bin/view/CMS/ScheduledInterventions'>scheduled interventions page</a> lists planned CMS and CERN service downtimes and known site-wide computing system incidents. Planned updates are notified on the <a href='https://hypernews.cern.ch/HyperNews/CMS/get/cernCompAnnounce.html'>CERN computing announcements</a> forum.</p><p>Would you please be so kind and <a href='https://ggus.eu/?mode=ticket_cms'>create a ticket</a> to"CMS Web Tools" support unit</a> if this interruption was unexpected?</p>
+   </div>
+  </div>
+  <div id="bottom">
+   <div class="boxFooter">&nbsp;</div>
+  </div>
+ </div>
+</body>
+</html>
+'
+DEBUG 2017-02-14 17:23:16,627: 	 Command failed with URI: https://cmsweb.cern.ch/crabserver/prod/workflow
+DEBUG 2017-02-14 17:23:16,627: 	      Input data: {'verbose': 0, 'workflow': u'170214_161656:calderon_crab_SingleMuonRun2016E_23SepMiniAOD_Run277070'}
+DEBUG 2017-02-14 17:23:16,627: 	      Request headers: {'Date': 'Tue, 14 Feb 2017 16:23:16 GMT', 'Connection': 'close', 'Content-Type': 'text/html', 'CMS-Server-Time': 'D=4461 t=1487089396618630', 'Server': 'Apache'}
+ERROR 2017-02-14 17:23:16,627: 	 Caught exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1702/bin/crab", line 160, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1702/bin/crab", line 148, in __call__
+    self.cmd()
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1702/lib/python2.7/site-packages/CRABClient/Commands/status.py", line 79, in __call__
+    dictresult, status, reason = server.get(self.uri, data = { 'workflow' : self.cachedinfo['RequestName'], 'verbose': verbose })
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1702/lib/python2.7/site-packages/RESTInteractions.py", line 79, in get
+    return self.makeRequest(uri = uri, data = data, verb = 'GET')
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1702/lib/python2.7/site-packages/RESTInteractions.py", line 128, in makeRequest
+    capath=caCertPath)#, verbose=True)# for debug
+  File "/cvmfs/cms.cern.ch/crab3/slc6_amd64_gcc493/cms/crabclient/3.3.1702/lib/python2.7/site-packages/WMCore/Services/pycurl_manager.py", line 207, in request
+    raise exc
+HTTPException: url=https://cmsweb.cern.ch/crabserver/prod/workflow, code=503, reason=Service Unavailable, headers={'Date': 'Tue, 14 Feb 2017 16:23:16 GMT', 'Connection': 'close', 'Content-Type': 'text/html', 'CMS-Server-Time': 'D=4461 t=1487089396618630', 'Server': 'Apache'}
+INFO 2017-02-14 17:23:16,630: 	 Log file is /afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26/src/MuonPOGtreeProducer/Tools/test/crab/crab_SingleMuonRun2016E_23SepMiniAOD_Run277070/crab.log
+DEBUG 2017-02-14 17:35:35,123: 	 Executing command: 'status'
+DEBUG 2017-02-14 17:35:35,125: 	 Found CRAB cache file /afs/cern.ch/user/c/calderon/.crab3
+DEBUG 2017-02-14 17:35:35,136: 	 Checking credentials
+DEBUG 2017-02-14 17:35:35,137: 	 Found proxy file /tmp/x509up_u15250
+DEBUG 2017-02-14 17:35:35,137: 	 Getting proxy life time left
+DEBUG 2017-02-14 17:35:35,743: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u15250 -timeleft
+ output : 85079
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:35:36,252: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u15250 -actimeleft
+ output : 85078
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:35:36,252: 	 Proxy valid for 23:37:59 hours
+DEBUG 2017-02-14 17:35:36,369: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=calderon/CN=602442/CN=Alicia Calderon Tazon
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:35:36,369: 	 Checking credentials
+DEBUG 2017-02-14 17:35:36,370: 	 Found proxy file /tmp/x509up_u15250
+DEBUG 2017-02-14 17:35:36,370: 	 Getting proxy life time left
+DEBUG 2017-02-14 17:35:36,877: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u15250 -timeleft
+ output : 85078
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:35:37,383: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u15250 -actimeleft
+ output : 85077
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:35:37,384: 	 Proxy valid for 23:37:58 hours
+DEBUG 2017-02-14 17:35:38,525: 	 Registering user credentials for server /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0118a|0119|0108|0105).cern.ch
+DEBUG 2017-02-14 17:35:38,634: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=calderon/CN=602442/CN=Alicia Calderon Tazon
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:35:38,634: 	 Getting myproxy life time left for myproxy.cern.ch
+DEBUG 2017-02-14 17:35:38,634: 	 Calculating hash of /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=calderon/CN=602442/CN=Alicia Calderon Tazon_cmsweb.cern.ch for credential name
+DEBUG 2017-02-14 17:35:38,938: 	 Executing : 
+ command : myproxy-info -l 05162609e2b2f4bf9da215d9d271987f01b8af73 -s myproxy.cern.ch
+ output : username: 05162609e2b2f4bf9da215d9d271987f01b8af73
+owner: /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=calderon/CN=602442/CN=Alicia Calderon Tazon
+  renewal policy: /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0118a|0119|0108|0105).cern.ch
+  trusted retrieval policy: /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0118a|0119|0108|0105).cern.ch
+  timeleft: 592:23:13  (24.7 days)
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 17:35:38,940: 	 Myproxy is valid: 2132593
+DEBUG 2017-02-14 17:35:38,940: 	 Command use: status
+DEBUG 2017-02-14 17:35:38,940: 	 Options use: ['crab_SingleMuonRun2016E_23SepMiniAOD_Run277070']
+DEBUG 2017-02-14 17:35:39,775: 	 CRABClient version: 3.3.1702
+DEBUG 2017-02-14 17:35:39,775: 	 Instance is prod
+DEBUG 2017-02-14 17:35:39,775: 	 Server base url is cmsweb.cern.ch
+DEBUG 2017-02-14 17:35:39,775: 	 Command url /crabserver/prod/workflow
+DEBUG 2017-02-14 17:35:39,775: 	 Looking up detailed status of task 170214_161656:calderon_crab_SingleMuonRun2016E_23SepMiniAOD_Run277070
+DEBUG 2017-02-14 17:35:47,413: 	 {u'status': u'SUBMITTED', u'username': u'calderon', u'jobsPerStatus': {u'running': 7, u'transferring': 1}, u'jobs': {u'1': {u'State': u'running'}, u'3': {u'State': u'running'}, u'2': {u'State': u'running'}, u'5': {u'State': u'running'}, u'4': {u'State': u'running'}, u'7': {u'State': u'running'}, u'6': {u'State': u'running'}, u'8': {u'State': u'transferring'}}, u'publication': {}, u'taskWarningMsg': [], u'schedd': u'crab3@vocms0194.cern.ch', u'publicationFailures': {}, u'outdatasets': None, u'statusFailureMsg': u'', u'taskFailureMsg': u'', u'failedJobdefs': 0, u'ASOURL': u'https://cmsweb.cern.ch/couchdb2', u'command': u'SUBMIT', u'totalJobdefs': 0, u'submissionTime': 1487089016, u'jobdefErrors': [], u'collector': u'cmsgwms-collector-global.cern.ch,cmssrv221.fnal.gov', u'jobList': [[u'running', 1], [u'running', 3], [u'running', 2], [u'running', 5], [u'running', 4], [u'running', 7], [u'running', 6], [u'transferring', 8]]}
+INFO 2017-02-14 17:35:47,413: 	 CRAB project directory:		/afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26/src/MuonPOGtreeProducer/Tools/test/crab/crab_SingleMuonRun2016E_23SepMiniAOD_Run277070
+INFO 2017-02-14 17:35:47,414: 	 Task name:			170214_161656:calderon_crab_SingleMuonRun2016E_23SepMiniAOD_Run277070
+INFO 2017-02-14 17:35:47,414: 	 Grid scheduler:			crab3@vocms0194.cern.ch
+INFO 2017-02-14 17:35:47,414: 	 Task status:			SUBMITTED
+INFO 2017-02-14 17:35:47,414: 	 Task URL to use for HELP:	https://cmsweb.cern.ch/crabserver/ui/task/170214_161656%3Acalderon_crab_SingleMuonRun2016E_23SepMiniAOD_Run277070
+INFO 2017-02-14 17:35:47,414: 	 Dashboard monitoring URL:	http://dashb-cms-job.cern.ch/dashboard/templates/task-analysis/#user=calderon&table=Mains&pattern=170214_161656%3Acalderon_crab_SingleMuonRun2016E_23SepMiniAOD_Run277070
+INFO 2017-02-14 17:35:47,415: 	 
+Jobs status:			running        87.5% (7/8)
+INFO 2017-02-14 17:35:47,415: 	 				transferring   12.5% (1/8)
+INFO 2017-02-14 17:35:47,415: 	 
+No publication information available yet
+INFO 2017-02-14 17:35:47,421: 	 Log file is /afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26/src/MuonPOGtreeProducer/Tools/test/crab/crab_SingleMuonRun2016E_23SepMiniAOD_Run277070/crab.log
+DEBUG 2017-02-14 18:45:24,650: 	 Executing command: 'status'
+DEBUG 2017-02-14 18:45:24,652: 	 Found CRAB cache file /afs/cern.ch/user/c/calderon/.crab3
+DEBUG 2017-02-14 18:45:24,694: 	 Checking credentials
+DEBUG 2017-02-14 18:45:24,695: 	 Found proxy file /tmp/x509up_u15250
+DEBUG 2017-02-14 18:45:24,695: 	 Getting proxy life time left
+DEBUG 2017-02-14 18:45:25,301: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u15250 -timeleft
+ output : 80889
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 18:45:25,912: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u15250 -actimeleft
+ output : 80889
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 18:45:25,912: 	 Proxy valid for 22:28:09 hours
+DEBUG 2017-02-14 18:45:26,205: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=calderon/CN=602442/CN=Alicia Calderon Tazon
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 18:45:26,205: 	 Checking credentials
+DEBUG 2017-02-14 18:45:26,205: 	 Found proxy file /tmp/x509up_u15250
+DEBUG 2017-02-14 18:45:26,205: 	 Getting proxy life time left
+DEBUG 2017-02-14 18:45:26,715: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u15250 -timeleft
+ output : 80888
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 18:45:27,325: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u15250 -actimeleft
+ output : 80887
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 18:45:27,325: 	 Proxy valid for 22:28:08 hours
+DEBUG 2017-02-14 18:45:36,002: 	 Registering user credentials for server /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0118a|0119|0108|0105).cern.ch
+DEBUG 2017-02-14 18:45:36,111: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=calderon/CN=602442/CN=Alicia Calderon Tazon
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 18:45:36,111: 	 Getting myproxy life time left for myproxy.cern.ch
+DEBUG 2017-02-14 18:45:36,111: 	 Calculating hash of /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=calderon/CN=602442/CN=Alicia Calderon Tazon_cmsweb.cern.ch for credential name
+DEBUG 2017-02-14 18:45:36,716: 	 Executing : 
+ command : myproxy-info -l 05162609e2b2f4bf9da215d9d271987f01b8af73 -s myproxy.cern.ch
+ output : username: 05162609e2b2f4bf9da215d9d271987f01b8af73
+owner: /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=calderon/CN=602442/CN=Alicia Calderon Tazon
+  renewal policy: /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0118a|0119|0108|0105).cern.ch
+  trusted retrieval policy: /DC=ch/DC=cern/OU=computers/CN=vocms(045|052|021|031|0118|0118a|0119|0108|0105).cern.ch
+  timeleft: 591:13:15  (24.6 days)
+
+ error: 
+ retcode : 0
+DEBUG 2017-02-14 18:45:36,717: 	 Myproxy is valid: 2128395
+DEBUG 2017-02-14 18:45:36,717: 	 Command use: status
+DEBUG 2017-02-14 18:45:36,717: 	 Options use: ['crab_SingleMuonRun2016E_23SepMiniAOD_Run277070']
+DEBUG 2017-02-14 18:45:37,352: 	 CRABClient version: 3.3.1702
+DEBUG 2017-02-14 18:45:37,353: 	 Instance is prod
+DEBUG 2017-02-14 18:45:37,353: 	 Server base url is cmsweb.cern.ch
+DEBUG 2017-02-14 18:45:37,353: 	 Command url /crabserver/prod/workflow
+DEBUG 2017-02-14 18:45:37,353: 	 Looking up detailed status of task 170214_161656:calderon_crab_SingleMuonRun2016E_23SepMiniAOD_Run277070
+DEBUG 2017-02-14 18:45:45,354: 	 {u'status': u'SUBMITTED', u'username': u'calderon', u'jobsPerStatus': {u'finished': 7, u'transferring': 1}, u'jobs': {u'1': {u'State': u'finished'}, u'3': {u'State': u'transferring'}, u'2': {u'State': u'finished'}, u'5': {u'State': u'finished'}, u'4': {u'State': u'finished'}, u'7': {u'State': u'finished'}, u'6': {u'State': u'finished'}, u'8': {u'State': u'finished'}}, u'publication': {}, u'taskWarningMsg': [], u'schedd': u'crab3@vocms0194.cern.ch', u'publicationFailures': {}, u'outdatasets': None, u'statusFailureMsg': u'', u'taskFailureMsg': u'', u'failedJobdefs': 0, u'ASOURL': u'https://cmsweb.cern.ch/couchdb2', u'command': u'SUBMIT', u'totalJobdefs': 0, u'submissionTime': 1487089016, u'jobdefErrors': [], u'collector': u'cmsgwms-collector-global.cern.ch,cmssrv221.fnal.gov', u'jobList': [[u'finished', 1], [u'transferring', 3], [u'finished', 2], [u'finished', 5], [u'finished', 4], [u'finished', 7], [u'finished', 6], [u'finished', 8]]}
+INFO 2017-02-14 18:45:45,355: 	 CRAB project directory:		/afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26/src/MuonPOGtreeProducer/Tools/test/crab/crab_SingleMuonRun2016E_23SepMiniAOD_Run277070
+INFO 2017-02-14 18:45:45,355: 	 Task name:			170214_161656:calderon_crab_SingleMuonRun2016E_23SepMiniAOD_Run277070
+INFO 2017-02-14 18:45:45,355: 	 Grid scheduler:			crab3@vocms0194.cern.ch
+INFO 2017-02-14 18:45:45,355: 	 Task status:			SUBMITTED
+INFO 2017-02-14 18:45:45,355: 	 Task URL to use for HELP:	https://cmsweb.cern.ch/crabserver/ui/task/170214_161656%3Acalderon_crab_SingleMuonRun2016E_23SepMiniAOD_Run277070
+INFO 2017-02-14 18:45:45,355: 	 Dashboard monitoring URL:	http://dashb-cms-job.cern.ch/dashboard/templates/task-analysis/#user=calderon&table=Mains&pattern=170214_161656%3Acalderon_crab_SingleMuonRun2016E_23SepMiniAOD_Run277070
+INFO 2017-02-14 18:45:45,356: 	 
+Jobs status:			finished       87.5% (7/8)
+INFO 2017-02-14 18:45:45,356: 	 				transferring   12.5% (1/8)
+INFO 2017-02-14 18:45:45,356: 	 
+No publication information available yet
+INFO 2017-02-14 18:45:45,400: 	 Log file is /afs/cern.ch/work/c/calderon/private/CMSSW_8_0_26/src/MuonPOGtreeProducer/Tools/test/crab/crab_SingleMuonRun2016E_23SepMiniAOD_Run277070/crab.log
