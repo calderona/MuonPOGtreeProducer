@@ -9,7 +9,7 @@ config.section_('JobType')
 config.JobType.pluginName  = 'Analysis'
 config.JobType.psetName    = '../muonPogNtuples_cfg.py'
 #config.JobType.outputFiles = ['muonNTuple.root']
-config.JobType.pyCfgParams = ['globalTag=',
+config.JobType.pyCfgParams = ['globalTag=92X_dataRun2_Express_v2',
                               'ntupleName=muonPOGNtuple_StreamExpressRun2017A_PromptReco.root',
                               'nEvents=-1',
                               'runOnMC=False',
@@ -20,16 +20,18 @@ config.JobType.pyCfgParams = ['globalTag=',
 config.JobType.allowUndistributedCMSSW = True  # To fix cmssw releases
 
 config.section_('Data')
-config.Data.inputDataset = '/StreamExpress/Run2017A-PromptCalibProd-Express-v1/ALCAPROMPT'
+config.Data.inputDataset = '/ExpressPhysics/Run2017A-Express-v1/FEVT'
+#'/StreamExpress/Run2017A-PromptCalibProd-Express-v1/ALCAPROMPT'
 
-config.Data.runRange = '296173'
+config.Data.runRange = '296174'
 #config.Data.allowNonValidInputDataset = True
 
 config.Data.splitting    = 'LumiBased'
 config.Data.unitsPerJob  = 150  # Since files based, 10 files per job
+config.Data.inputDBS = 'global'
+config.Data.lumiMask = 'theFirstDataJson.json'
 config.Data.inputDBS     = 'https://cmsweb.cern.ch/dbs/prod/global/DBSReader/'
-config.Data.outLFNDirBase  = '/store/group/phys_higgs/cmshww/calderon/test92X'
-#'/store/group/phys_muon/calderon/NTuplesMuonPOG'
+config.Data.outLFNDirBase  = '/store/group/phys_muon/calderon/NTuplesMuonPOG'
 
 config.section_('Site')
 config.Site.storageSite = 'T2_CH_CERN'
